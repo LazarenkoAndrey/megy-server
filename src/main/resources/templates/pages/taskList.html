@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head th:replace="fragments/global :: head" />
+<body>
+    <nav th:replace="fragments/global :: navbar ('taskList')"/>
+
+    <div class="container">
+        <table class="table table-hover">
+            <caption>Active tasks</caption>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Status</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="task : ${activeTaskList}">
+                    <td th:text="${task.id}"></td>
+                    <td th:text="${task.status}"></td>
+                    <td th:text="${task.taskName}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container">
+        <table class="table table-hover">
+            <caption>Completed tasks</caption>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Status</th>
+                <th>Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task : ${completedTaskList}" th:class="${selectedTaskId} == ${task.id} ? 'active'">
+                <td th:text="${task.id}"></td>
+                <td th:text="${task.status}"></td>
+                <td th:text="${task.taskName}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:replace="fragments/global :: script"/>
+</body>
+</html>

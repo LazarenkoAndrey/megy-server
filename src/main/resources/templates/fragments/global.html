@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      lang="en">
+<head th:fragment="head">
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content="megy-server"/>
+    <meta name="author" content="Lazarenko Andrey"/>
+    <link rel="icon" th:href="@{/favicon.ico}"/>
+
+    <title th:text="#{project.name}"></title>
+
+    <link th:href="@{/static/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/static/css/megy.css}" rel="stylesheet"/>
+</head>
+<body>
+    <nav th:fragment="navbar (item)" class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" th:href="@{/}" th:text="#{project.name}"></a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li th:class="${item} == 'repoList' ? 'active'">
+                        <a th:href="@{/pages/repoList}">Repository list</a>
+                    </li>
+                    <li th:class="${item} == 'backupList' ? 'active'">
+                        <a th:href="@{/pages/backupList}">Backup list</a>
+                    </li>
+                    <li th:class="${item} == 'taskList' ? 'active'">
+                        <a th:href="@{/pages/taskList}">Task list</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <span sec:authentication="name"></span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Information</a></li>
+                            <li><a th:href="@{/logout}">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div th:fragment="script" class="sr-only">
+        <script th:src="@{/static/js/jquery-1.12.1.min.js}"></script>
+        <script th:src="@{/static/bootstrap/js/bootstrap.min.js}"></script>
+        <script th:src="@{/static/js/megy.js}"></script>
+    </div>
+</body>
+</html>

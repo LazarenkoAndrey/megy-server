@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="fragments/global :: head" />
+<body>
+<!--
+       <div>Time <span th:text="${time}">The error message</span></div>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out"/>
+    </form>
+    <form th:action="@{/shutdown}" method="post">
+        <input type="submit" value="Shutdown"/>
+    </form>
+    <div>
+        <a th:href="@{/h2-console}">Go to H2</a>
+    </div>
+    <div>
+        <a th:href="@{/pages/backupList}">Go to Megy</a>
+    </div>
+-->
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <a th:href="@{/pages/backupList}">
+                    <div class="tile div-red">
+                        Megy Server
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <a th:href="@{/h2-console}">
+                    <div class="tile div-green">
+                        H2 console
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments/global :: script"/>
+</body>
+</html>

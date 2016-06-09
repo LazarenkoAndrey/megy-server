@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head th:replace="fragments/global :: head" />
+<body>
+    <nav th:replace="fragments/global :: navbar ('backupList')"/>
+
+    <div class="container">
+        <table class="table table-hover">
+            <caption>Backup list</caption>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Backup path</th>
+                    <th>Repo</th>
+                    <th>Last Version</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="backup : ${backupList}">
+                    <td>
+                        <a th:href="@{'/pages/backupView/' + ${backup.id}}" th:text="${backup.id}"/>
+                    </td>
+                    <td th:text="${backup.path}"></td>
+                    <td>
+                        <ul class="list-unstyled">
+                            <li th:text="${backup.repo.id}"></li>
+                            <li th:text="${backup.repo.path}"></li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul class="list-unstyled" th:if="${backup.lastVersion} != null">
+                            <li th:text="${backup.lastVersion.id}"></li>
+                            <li th:text="${#dates.format(backup.lastVersion.createdDate)}"></li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:replace="fragments/global :: script"/>
+</body>
+</html>

@@ -1,0 +1,48 @@
+body {
+  padding-top: 100px;
+}
+
+.container-small {
+  width: 400px;
+}
+
+.tile {
+  padding: 30px;
+  margin-bottom: 30px;
+  box-sizing: border-box;
+  color: #fff;
+
+}
+.tile, .tile:link, .tile:visited, .tile:active, .tile:hover {
+  text-decoration: none;
+}
+.tile.div-purple {
+  background-color: #5133AB;
+}
+.tile.div-purple:hover {
+  background-color: #4A2E97;
+}
+.tile.div-red {
+  background-color: #AC193D;
+}
+.tile.div-red:hover {
+  background-color: #98193A;
+}
+.tile.div-orange {
+  background-color: #DC572E;
+}
+.tile.div-orange:hover {
+  background-color: #C8562D;
+}
+.tile.div-green {
+  background-color: #00A600;
+}
+.tile.div-green:hover {
+  background-color: #009200;
+}
+.tile.div-blue {
+  background-color: #2672EC;
+}
+.tile.div-blue:hover {
+  background-color: #266DD8;
+}

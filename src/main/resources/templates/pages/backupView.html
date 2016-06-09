@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head th:replace="fragments/global :: head" />
+<body>
+    <nav th:replace="fragments/global :: navbar ('backupList')"/>
+
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">Backup item</div>
+            <div class="panel-body">
+                <ul class="list-inline">
+                    <li>
+                        <dl class="dl-horizontal">
+                            <dt>ID</dt>
+                            <dd th:text="${backup.id}" />
+                            <dt>Path</dt>
+                            <dd th:text="${backup.path}" />
+                        </dl>
+                    </li>
+                    <li>
+                        <dl class="dl-horizontal">
+                            <dt>Repo ID</dt>
+                            <dd th:text="${backup.repo.id}" />
+                            <dt>Repo path</dt>
+                            <dd th:text="${backup.repo.path}" />
+                        </dl>
+                    </li>
+                </ul>
+                <ul class="list-inline">
+                    <li>
+                        <form th:action="@{/action/backup}" method="post">
+                            <input type="hidden" name="backupId" th:value="${backup.id}" />
+                            <input type="hidden" name="method" value="sync" />
+                            <input type="submit" value="Synchronize" class="btn btn-default disableButtonOnClick" />
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <table class="table table-hover">
+            <caption>Version list</caption>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Created date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="version : ${backupVersionList}">
+                    <td th:text="${version.id}"/>
+                    <td th:text="${#dates.format(version.createdDate)}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:replace="fragments/global :: script"/>
+</body>
+</html>
