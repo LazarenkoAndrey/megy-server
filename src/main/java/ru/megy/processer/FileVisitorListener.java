@@ -89,9 +89,9 @@ public class FileVisitorListener implements FileVisitor<Path> {
 
         cntItem++;
         taskThread.setPercent(maxPercent * cntItem / totalItem);
-        if(taskThread.isInterrupted()){
-            logger.error("it was interrupt from taskInfo");
-            throw new IOException(new InterruptedException());
+        if(taskThread.isStopping()){
+            logger.error("It was interrupt from taskThread");
+            throw new IOException(new InterruptedException("It was interrupt from taskThread"));
         }
 
         return FileVisitResult.CONTINUE;
@@ -126,9 +126,9 @@ public class FileVisitorListener implements FileVisitor<Path> {
 
         cntItem++;
         taskThread.setPercent(maxPercent * cntItem / totalItem);
-        if(taskThread.isInterrupted()){
-            logger.error("it was interrupt from taskInfo");
-            throw new IOException(new InterruptedException());
+        if(taskThread.isStopping()){
+            logger.error("It was interrupt from taskThread");
+            throw new IOException(new InterruptedException("It was interrupt from taskThread"));
         }
 
         return FileVisitResult.CONTINUE;

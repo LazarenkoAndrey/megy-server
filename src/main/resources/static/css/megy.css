@@ -1,48 +1,58 @@
 body {
-  padding-top: 100px;
+    padding-top: 100px;
 }
 
 .container-small {
-  width: 400px;
+    width: 400px;
 }
 
-.tile {
-  padding: 30px;
-  margin-bottom: 30px;
-  box-sizing: border-box;
-  color: #fff;
+.tile-container .tile {
+    padding: 30px;
+    margin-bottom: 30px;
+    box-sizing: border-box;
+    color: #fff;
+}
 
+.tile-container a, .tile-container a:link, .tile-container a:visited, .tile-container a:active, .tile-container a:hover {
+    text-decoration: none;
 }
-.tile, .tile:link, .tile:visited, .tile:active, .tile:hover {
-  text-decoration: none;
+
+.tile-container .tile.div-purple {
+    background-color: #5133AB;
 }
-.tile.div-purple {
-  background-color: #5133AB;
+
+.tile-container .tile.div-purple:hover {
+    background-color: #4A2E97;
 }
-.tile.div-purple:hover {
-  background-color: #4A2E97;
+
+.tile-container .tile.div-red {
+    background-color: #AC193D;
 }
-.tile.div-red {
-  background-color: #AC193D;
+
+.tile-container .tile.div-red:hover {
+    background-color: #98193A;
 }
-.tile.div-red:hover {
-  background-color: #98193A;
+
+.tile-container .tile.div-orange {
+    background-color: #DC572E;
 }
-.tile.div-orange {
-  background-color: #DC572E;
+
+.tile-container .tile.div-orange:hover {
+    background-color: #C8562D;
 }
-.tile.div-orange:hover {
-  background-color: #C8562D;
+
+.tile-container .tile.div-green {
+    background-color: #00A600;
 }
-.tile.div-green {
-  background-color: #00A600;
+
+.tile-container .tile.div-green:hover {
+    background-color: #009200;
 }
-.tile.div-green:hover {
-  background-color: #009200;
+
+.tile-container .tile.div-blue {
+    background-color: #2672EC;
 }
-.tile.div-blue {
-  background-color: #2672EC;
-}
-.tile.div-blue:hover {
-  background-color: #266DD8;
+
+.tile-container .tile.div-blue:hover {
+    background-color: #266DD8;
 }

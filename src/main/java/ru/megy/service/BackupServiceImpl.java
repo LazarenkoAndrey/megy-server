@@ -168,9 +168,9 @@ public class BackupServiceImpl implements BackupService {
 
                 cntItem++;
                 taskThread.setPercent(20.0f + 50.0f * cntItem / totalItem);
-                if(taskThread.isInterrupted()){
-                    logger.error("it was interrupt from taskInfo");
-                    throw new InterruptedException();
+                if(taskThread.isStopping()){
+                    logger.error("It was interrupt from taskThread");
+                    throw new InterruptedException("It was interrupt from taskThread");
                 }
             }
 
@@ -187,9 +187,9 @@ public class BackupServiceImpl implements BackupService {
 
                 cntItem++;
                 taskThread.setPercent(70.0f + 20.0f * cntItem / totalItem);
-                if(taskThread.isInterrupted()){
-                    logger.error("it was interrupt from taskInfo");
-                    throw new InterruptedException();
+                if(taskThread.isStopping()){
+                    logger.error("It was interrupt from taskThread");
+                    throw new InterruptedException("It was interrupt from taskThread");
                 }
             }
 

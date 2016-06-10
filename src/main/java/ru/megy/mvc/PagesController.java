@@ -21,8 +21,8 @@ import ru.megy.service.entity.TaskThread;
 import java.util.List;
 
 @Controller
-public class PageController {
-    private static final Logger logger = LoggerFactory.getLogger(PageController.class);
+public class PagesController {
+    private static final Logger logger = LoggerFactory.getLogger(PagesController.class);
 
     @Autowired
     private BackupService backupService;
@@ -48,7 +48,7 @@ public class PageController {
     }
 
     @RequestMapping("/pages/taskList")
-    public String taskList(@RequestParam("selected") Long selectedTaskId, Model model) {
+    public String taskList(@RequestParam(value = "selected", required=false) Long selectedTaskId, Model model) {
         List<TaskThread> activeTaskList = taskService.getActiveTaskList();
         List<TaskThread> completedTaskList = taskService.getCompletedTaskList();
         model.addAttribute("activeTaskList", activeTaskList);
@@ -67,24 +67,5 @@ public class PageController {
         model.addAttribute("backupVersionList", backupVersionList);
 
         return "/pages/backupView";
-    }
-
-    @RequestMapping("/action/backup")
-    public String backupAction(@RequestParam("backupId") long backupId, @RequestParam("method") String method, Model model) throws ViewException {
-        if(method.equals("sync")) {
-            TaskThread taskThread = new TaskThread("backup.sync(" + backupId + ")", taskService) {
-                @Override
-                public void process() throws ServiceException {
-                    logger.info("Starting to sync of backup. backupId: {}", backupId);
-                    Long versionId = backupService.sync(Long.valueOf(backupId), this);
-                    logger.info("Sync of backup was completed successfully. backupId: {}, versionId: {}", backupId, versionId);
-                }
-            };
-            taskThread.start();
-
-            return "redirect:/pages/taskList?selected="+taskThread.getId();
-        } else {
-            throw new ViewException("Method value is incorrect");
-        }
     }
 }

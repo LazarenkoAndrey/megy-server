@@ -17,15 +17,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .headers().frameOptions().sameOrigin();
 
         http.authorizeRequests()
-            .antMatchers("/", "/home", "/static/**").permitAll()
+            .antMatchers("/static/**").permitAll()
             .anyRequest().authenticated()
             .and()
-            .formLogin()
-            .loginPage("/login")
-            .permitAll()
+            .formLogin().loginPage("/login").permitAll()
             .and()
-            .logout()
-            .permitAll();
+            .logout().permitAll()
+            .and()
+            .rememberMe();
     }
 
     @Autowired

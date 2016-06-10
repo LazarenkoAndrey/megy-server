@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="fragments/global :: head" />
+<body>
+    <nav th:replace="fragments/global :: navbar ('backupList')"/>
+
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">Profile</div>
+            <div class="panel-body">
+                <ul class="list-inline">
+                    <li>
+                        <dl class="dl-horizontal">
+                            <dt>Username</dt>
+                            <dd th:text="${username}" />
+                            <dt>Roles</dt>
+                            <dd th:text="${roles}" />
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments/global :: script"/>
+</body>
+</html>

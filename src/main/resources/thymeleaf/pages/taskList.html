@@ -14,13 +14,15 @@
                     <th>ID</th>
                     <th>Status</th>
                     <th>Name</th>
+                    <th>Stopped x</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="task : ${activeTaskList}">
+                <tr th:each="task : ${activeTaskList}" th:class="${selectedTaskId} == ${task.id} ? 'active'">
                     <td th:text="${task.id}"></td>
                     <td th:text="${task.status}"></td>
-                    <td th:text="${task.taskName}"></td>
+                    <td th:text="${task.name}"></td>
+                    <td th:text="${task.stopping}"></td>
                 </tr>
             </tbody>
         </table>
@@ -34,13 +36,17 @@
                 <th>ID</th>
                 <th>Status</th>
                 <th>Name</th>
+                <th>Stopped</th>
+                <th>Message</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="task : ${completedTaskList}" th:class="${selectedTaskId} == ${task.id} ? 'active'">
                 <td th:text="${task.id}"></td>
                 <td th:text="${task.status}"></td>
-                <td th:text="${task.taskName}"></td>
+                <td th:text="${task.name}"></td>
+                <td th:text="${task.stopping}"></td>
+                <td th:text="${task.message}"></td>
             </tr>
             </tbody>
         </table>

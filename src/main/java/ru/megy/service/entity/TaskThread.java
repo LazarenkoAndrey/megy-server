@@ -51,12 +51,17 @@ public abstract class TaskThread {
         thread.start();
     }
 
-    public void interrupt() {
-        thread.interrupt();
+    public void stop() {
+        if(status!=null && status.equals(TaskStatusEnum.PROCESSING)) {
+            status = TaskStatusEnum.STOPPING;
+            if(thread!=null) {
+                thread.interrupt();
+            }
+        }
     }
 
-    public boolean isInterrupted() {
-        return thread==null ? false : thread.isInterrupted();
+    public boolean isStopping() {
+        return TaskStatusEnum.STOPPING.equals(status);
     }
 
     public long getId() {
@@ -106,6 +111,10 @@ public abstract class TaskThread {
 
     public void setPercent(float percent) {
         this.percent = percent;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     @Override

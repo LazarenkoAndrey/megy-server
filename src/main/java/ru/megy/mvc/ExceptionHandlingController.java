@@ -27,7 +27,7 @@ public class ExceptionHandlingController {
         mav.addObject("exception", exception);
         mav.addObject("url", req.getRequestURL());
         mav.addObject("timestamp", new Date());
-        mav.setViewName("handleError");
+        mav.setViewName("errorInfo");
 
         return mav;
     }

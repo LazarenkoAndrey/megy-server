@@ -95,7 +95,7 @@ public class megy extends BaseCommand {
         if(taskThread==null) {
             out.println("Task don't found among the active tasks");
         } else {
-            taskThread.interrupt();
+            taskThread.stop();
             out.println("The task will be interrupted");
         }
     }
@@ -229,32 +229,27 @@ public class megy extends BaseCommand {
 
     private SnapshotService getSnapshotService() {
         BeanFactory factory = (BeanFactory) context.getAttributes().get("spring.beanfactory");
-        SnapshotService snapshotService = factory.getBean(SnapshotService.class);
-        return snapshotService;
+        return factory.getBean(SnapshotService.class);
     }
 
     private RepoService getRepoService() {
         BeanFactory factory = (BeanFactory) context.getAttributes().get("spring.beanfactory");
-        RepoService repoService = factory.getBean(RepoService.class);
-        return repoService;
+        return factory.getBean(RepoService.class);
     }
 
     private BackupService getBackupService() {
         BeanFactory factory = (BeanFactory) context.getAttributes().get("spring.beanfactory");
-        BackupService backupService = factory.getBean(BackupService.class);
-        return backupService;
+        return factory.getBean(BackupService.class);
     }
 
     private Environment getEnvironment() {
         BeanFactory factory = (BeanFactory) context.getAttributes().get("spring.beanfactory");
-        Environment environment = factory.getBean(Environment.class);
-        return environment;
+        return factory.getBean(Environment.class);
     }
 
     private TaskService getTaskService() {
         BeanFactory factory = (BeanFactory) context.getAttributes().get("spring.beanfactory");
-        TaskService taskService = factory.getBean(TaskService.class);
-        return taskService;
+        return factory.getBean(TaskService.class);
     }
 
 

@@ -4,25 +4,6 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:replace="fragments/global :: head" />
 <body style="background-color: #eee;">
-<!--
-    <div th:if="${param.error}">
-
-    </div>
-
-    <form id="loginForm" th:action="@{/login}" method="post">
-        <div>
-            <label for="username">User Name : </label>
-            <input id="username" type="text" name="username"/>
-        </div>
-        <div>
-            <label for="password">Password : </label>
-            <input id="password" type="password" name="password"/>
-        </div>
-        <div><input type="submit" value="Sign In"/></div>
-        style="max-width: 330px; margin: 0 auto;"
-    </form>
--->
-
     <div class="container container-small">
         <form id="loginForm" th:action="@{/login}" method="post">
             <h2>Please sign in</h2>
@@ -41,7 +22,7 @@
             <div class="form-group">
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" value="remember-me"/> Remember me
+                        <input id="remember-me" name="remember-me" type="checkbox" /> Remember me
                     </label>
                 </div>
             </div>
