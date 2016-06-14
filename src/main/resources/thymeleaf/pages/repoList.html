@@ -16,12 +16,18 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="repo : ${repoList}">
+                <tr th:each="repo : ${repoList}" th:class="${selectedRepoId} == ${repo.id} ? 'active'">
                     <td th:text="${repo.id}"></td>
                     <td th:text="${repo.path}"></td>
                 </tr>
             </tbody>
         </table>
+
+        <ul class="list-inline">
+            <li>
+                <a th:href="@{/pages/repoCreate}" class="btn btn-default disableButtonOnClick" role="button">Add</a>
+            </li>
+        </ul>
     </div>
 
     <div th:replace="fragments/global :: script"/>

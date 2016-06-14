@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 import ru.megy.config.*;
 
 import java.io.IOException;
@@ -20,7 +21,8 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-@SpringBootApplication(scanBasePackages = "ru.megy.service")
+@SpringBootApplication
+@ComponentScan(basePackages="ru.megy.service")
 public class Application {
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
 

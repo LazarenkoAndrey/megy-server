@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head th:replace="fragments/global :: head" />
+<body>
+    <nav th:replace="fragments/global :: navbar ('repoList')"/>
+
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">Create repository</div>
+            <div class="panel-body">
+                <form th:action="@{/action/repo}" method="post" th:object="${pathVO}">
+                    <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+                        <ul class="list-unstyled">
+                            <li th:each="err : ${#fields.errors('*')}" th:text="${err}"/>
+                        </ul>
+                    </div>
+
+                    <div th:class="'form-group' + (${#fields.hasErrors('path')} ? ' has-error' : '')">
+                        <label for="inputPath" class="control-label">Path</label>
+                        <input id="inputPath" type="text" class="form-control" placeholder="Path" th:field="*{path}"/>
+                    </div>
+                    <input type="hidden" name="method" value="add" />
+                    <input type="submit" value="Create" class="btn btn-default disableButtonOnClick" />
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments/global :: script"/>
+</body>
+</html>

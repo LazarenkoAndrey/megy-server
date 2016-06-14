@@ -8,8 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import ru.megy.exception.ServiceException;
 import ru.megy.exception.ViewException;
+import ru.megy.mvc.objects.PathVO;
 import ru.megy.repository.entity.Backup;
 import ru.megy.repository.entity.BackupVersion;
 import ru.megy.repository.entity.Repo;
@@ -40,11 +42,17 @@ public class PagesController {
     }
 
     @RequestMapping("/pages/repoList")
-    public String repoList(Model model) {
+    public String repoList(@RequestParam(value = "selected", required=false) Long selectedTaskId, Model model) {
         List<Repo> repoList = repoService.getRepos();
         model.addAttribute("repoList", repoList);
+        model.addAttribute("selectedRepoId", selectedTaskId);
 
         return "/pages/repoList";
+    }
+
+    @RequestMapping("/pages/repoCreate")
+    public ModelAndView repoCreate() {
+        return new ModelAndView("/pages/repoCreate", "pathVO", new PathVO());
     }
 
     @RequestMapping("/pages/taskList")
