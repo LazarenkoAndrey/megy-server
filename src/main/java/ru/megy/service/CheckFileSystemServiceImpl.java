@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
+import ru.megy.exception.ServiceException;
 import ru.megy.service.entity.ResultCheckFileSystem;
 
 import java.io.File;
@@ -18,15 +19,14 @@ public class CheckFileSystemServiceImpl implements CheckFileSystemService {
     private List<String> dirForCheckFreeSpace;
     private Long thresholdForCheckFreeSpace;
 
-    public ResultCheckFileSystem checkFreeSpace() throws Exception {
-        logger.info("checkFreeSpace");
-
+    @Override
+    public ResultCheckFileSystem checkFreeSpace() throws ServiceException {
         if(dirForCheckFreeSpace==null || dirForCheckFreeSpace.size()==0) {
-            throw new IllegalArgumentException("sfileserver.checkFreeSpace.dir is empty");
+            throw new ServiceException("checkFileSystem.dirForCheckFreeSpace is empty");
         }
 
         if(thresholdForCheckFreeSpace==null) {
-            throw new IllegalArgumentException("sfileserver.checkFreeSpace.threshold is empty");
+            throw new ServiceException("checkFileSystem.thresholdForCheckFreeSpace is empty");
         }
 
         boolean result = true;

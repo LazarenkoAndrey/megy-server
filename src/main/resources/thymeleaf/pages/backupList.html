@@ -18,7 +18,9 @@
                 </tr>
             </thead>
             <tbody>
+                <!--/*@thymesVar id="backupList" type="java.util.List"*/-->
                 <tr th:each="backup : ${backupList}">
+                    <!--/*@thymesVar id="backup" type="ru.megy.repository.entity.Backup"*/-->
                     <td>
                         <a th:href="@{'/pages/backupView/' + ${backup.id}}" th:text="${backup.id}"/>
                     </td>
@@ -38,6 +40,12 @@
                 </tr>
             </tbody>
         </table>
+
+        <ul class="list-inline">
+            <li>
+                <a th:href="@{/pages/backupCreate}" class="btn btn-default disableButtonOnClick" role="button">Add</a>
+            </li>
+        </ul>
     </div>
 
     <div th:replace="fragments/global :: script"/>

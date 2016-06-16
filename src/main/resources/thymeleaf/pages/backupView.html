@@ -21,18 +21,17 @@
                     </li>
                     <li>
                         <dl class="dl-horizontal">
-                            <dt>Repo ID</dt>
+                            <dt>Repository ID</dt>
                             <dd th:text="${backup.repo.id}" />
-                            <dt>Repo path</dt>
+                            <dt>Repository path</dt>
                             <dd th:text="${backup.repo.path}" />
                         </dl>
                     </li>
                 </ul>
                 <ul class="list-inline">
                     <li>
-                        <form th:action="@{/action/backup}" method="post">
+                        <form th:action="@{/action/backup/sync}" method="post">
                             <input type="hidden" name="backupId" th:value="${backup.id}" />
-                            <input type="hidden" name="method" value="sync" />
                             <input type="submit" value="Synchronize" class="btn btn-default disableButtonOnClick" />
                         </form>
                     </li>

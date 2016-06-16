@@ -10,7 +10,8 @@
         <div class="panel panel-default">
             <div class="panel-heading">Create repository</div>
             <div class="panel-body">
-                <form th:action="@{/action/repo}" method="post" th:object="${pathVO}">
+                <!--/*@thymesVar id="repoVO" type="ru.megy.mvc.objects.RepoVO"*/-->
+                <form th:action="@{/action/repo/add}" method="post" th:object="${repoVO}">
                     <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
                         <ul class="list-unstyled">
                             <li th:each="err : ${#fields.errors('*')}" th:text="${err}"/>
@@ -21,8 +22,7 @@
                         <label for="inputPath" class="control-label">Path</label>
                         <input id="inputPath" type="text" class="form-control" placeholder="Path" th:field="*{path}"/>
                     </div>
-                    <input type="hidden" name="method" value="add" />
-                    <input type="submit" value="Create" class="btn btn-default disableButtonOnClick" />
+                    <input type="submit" value="Create" class="btn btn-primary disableButtonOnClick" />
                 </form>
             </div>
         </div>

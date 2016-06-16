@@ -21,8 +21,7 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-@SpringBootApplication
-@ComponentScan(basePackages="ru.megy.service")
+@SpringBootApplication(scanBasePackages = "ru.megy.service")
 public class Application {
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
@@ -40,15 +39,6 @@ public class Application {
                                                                             SchedulingConfig.class)
                 .web(true)
                 .run(args);
-
-        // printInitBeans(ctx);
     }
 
-    private void printInitBeans(ApplicationContext ctx) {
-        Arrays.stream(ctx.getBeanDefinitionNames())
-                .sorted()
-                .forEach(beanName -> {
-                    logger.info("Bean: {}", beanName);
-                });
-    }
 }

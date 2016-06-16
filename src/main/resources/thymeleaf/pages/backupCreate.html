@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head th:replace="fragments/global :: head" />
+<body>
+    <nav th:replace="fragments/global :: navbar ('backupList')"/>
+
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">Create backup</div>
+            <div class="panel-body">
+                <!--/*@thymesVar id="backupVO" type="ru.megy.mvc.objects.BackupVO"*/-->
+                <form th:action="@{/action/backup/add}" method="post"
+                      th:object="${backupVO}">
+                    <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+                        <ul class="list-unstyled">
+                            <li th:each="err : ${#fields.errors('*')}"
+                                th:text="${err}"/>
+                        </ul>
+                    </div>
+
+                    <div th:class="'form-group' + (${#fields.hasErrors('path')} ? ' has-error' : '')">
+                        <label for="inputPath" class="control-label">Path</label>
+                        <input id="inputPath" type="text" class="form-control" placeholder="Path" th:field="*{path}"/>
+                    </div>
+
+                    <div th:class="'form-group' + (${#fields.hasErrors('path')} ? ' has-error' : '')">
+                        <label for="inputRepo" class="control-label">Repository</label>
+                        <select id="inputRepo" class="form-control" placeholder="Path"
+                                th:field="*{repoId}">
+                            <!--/*@thymesVar id="repoList" type="java.util.List<ru.megy.repository.entity.Repo>"*/-->
+                            <option value="" label=""/>
+                            <option th:each="itemRepo : ${repoList}"
+                                    th:value="${itemRepo.id}"
+                                    th:text="${itemRepo.id} + ': ' + ${itemRepo.path}" />
+                        </select>
+                    </div>
+
+                    <input type="submit" value="Create" class="btn btn-primary disableButtonOnClick" />
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="fragments/global :: script"/>
+</body>
+</html>

@@ -14,7 +14,8 @@
                     <th>ID</th>
                     <th>Status</th>
                     <th>Name</th>
-                    <th>Stopped x</th>
+                    <th>Stopped</th>
+                    <th>Percent</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,6 +24,17 @@
                     <td th:text="${task.status}"></td>
                     <td th:text="${task.name}"></td>
                     <td th:text="${task.stopping}"></td>
+                    <td>
+                        <div class="progress" style="margin-bottom: 0 !important;">
+                            <div class="progress-bar" role="progressbar"
+                                 aria-valuemin="0" aria-valuemax="100"
+                                 th:attr="aria-valuenow=${task.percent}"
+                                 th:style="'width: ' + ${task.percent} + '%;'"
+                                 th:text="${#numbers.formatDecimal(task.percent, 0, 'DEFAULT', 2, 'DEFAULT')} + '%'">
+                            </div>
+                        </div>
+                    </td>
+
                 </tr>
             </tbody>
         </table>
@@ -36,6 +48,7 @@
                 <th>ID</th>
                 <th>Status</th>
                 <th>Name</th>
+                <th>Finish time</th>
                 <th>Stopped</th>
                 <th>Message</th>
             </tr>
@@ -45,6 +58,7 @@
                 <td th:text="${task.id}"></td>
                 <td th:text="${task.status}"></td>
                 <td th:text="${task.name}"></td>
+                <td th:text="${#dates.format(task.finishTime, 'dd.MM.yyyy HH:mm:ss')}"></td>
                 <td th:text="${task.stopping}"></td>
                 <td th:text="${task.message}"></td>
             </tr>

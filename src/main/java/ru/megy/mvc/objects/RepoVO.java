@@ -4,7 +4,7 @@ package ru.megy.mvc.objects;
 import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-public class PathVO {
+public class RepoVO {
     @NotEmpty
     @Size(min = 1, max = 3999)
     private String path;
