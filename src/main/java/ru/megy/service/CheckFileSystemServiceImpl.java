@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.megy.exception.ServiceException;
 import ru.megy.service.entity.ResultCheckFileSystem;
 
+import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.util.List;
 
@@ -16,26 +17,20 @@ public class CheckFileSystemServiceImpl implements CheckFileSystemService {
     private static final Logger logger = LoggerFactory.getLogger(CheckFileSystemServiceImpl.class);
     private static final long GB_VALUE = 1024L * 1024L * 1024L;
 
-    private List<String> dirForCheckFreeSpace;
-    private Long thresholdForCheckFreeSpace;
+    @NotNull
+    private List<String> directories;
+    @NotNull
+    private Long thresholdGByte;
 
     @Override
-    public ResultCheckFileSystem checkFreeSpace() throws ServiceException {
-        if(dirForCheckFreeSpace==null || dirForCheckFreeSpace.size()==0) {
-            throw new ServiceException("checkFileSystem.dirForCheckFreeSpace is empty");
-        }
-
-        if(thresholdForCheckFreeSpace==null) {
-            throw new ServiceException("checkFileSystem.thresholdForCheckFreeSpace is empty");
-        }
-
+    public ResultCheckFileSystem checkFreeSpace() {
         boolean result = true;
         StringBuffer sb = new StringBuffer();
 
-        for(String dirPath : dirForCheckFreeSpace) {
+        for(String dirPath : directories) {
             File dir = new File(dirPath.trim());
             long freeSpace = dir.getFreeSpace();
-            if (freeSpace < thresholdForCheckFreeSpace * GB_VALUE) {
+            if (freeSpace < thresholdGByte * GB_VALUE) {
                 result = false;
                 sb.append("free space: ").append(freeSpace / GB_VALUE ).append("GB, path: ").append(dirPath).append("\r\n");
             }
@@ -44,19 +39,19 @@ public class CheckFileSystemServiceImpl implements CheckFileSystemService {
         return new ResultCheckFileSystem(result, sb.toString());
     }
 
-    public List<String> getDirForCheckFreeSpace() {
-        return dirForCheckFreeSpace;
+    public List<String> getDirectories() {
+        return directories;
     }
 
-    public void setDirForCheckFreeSpace(List<String> dirForCheckFreeSpace) {
-        this.dirForCheckFreeSpace = dirForCheckFreeSpace;
+    public void setDirectories(List<String> directories) {
+        this.directories = directories;
     }
 
-    public Long getThresholdForCheckFreeSpace() {
-        return thresholdForCheckFreeSpace;
+    public Long getThresholdGByte() {
+        return thresholdGByte;
     }
 
-    public void setThresholdForCheckFreeSpace(Long thresholdForCheckFreeSpace) {
-        this.thresholdForCheckFreeSpace = thresholdForCheckFreeSpace;
+    public void setThresholdGByte(Long thresholdGByte) {
+        this.thresholdGByte = thresholdGByte;
     }
 }
