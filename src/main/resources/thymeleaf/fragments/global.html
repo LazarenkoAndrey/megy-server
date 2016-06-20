@@ -39,6 +39,9 @@
                     <li th:class="${item} == 'taskList' ? 'active'">
                         <a th:href="@{/pages/taskList}">Task list</a>
                     </li>
+                    <li th:class="${item} == 'messageList' ? 'active'">
+                        <a th:href="@{/pages/messageList}">Message list</a>
+                    </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
@@ -56,7 +59,7 @@
         </div>
     </nav>
 
-    <div th:fragment="script" class="sr-only">
+    <div th:fragment="script" style="margin-top: 50px;">
         <script th:src="@{/static/js/jquery-1.12.1.min.js}"></script>
         <script th:src="@{/static/bootstrap/js/bootstrap.min.js}"></script>
         <script th:src="@{/static/js/megy.js}"></script>

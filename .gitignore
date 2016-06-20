@@ -1,4 +1,5 @@
 target
+build
 config/application-default.properties
 *.iml
 *.log
@@ -17,4 +18,4 @@ config/application-default.properties
 .tssapinfo
 .metadata
 .gitconfig
-
+.gradle

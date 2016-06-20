@@ -7,6 +7,6 @@ import java.nio.file.Path;
 import java.util.List;
 
 public interface RepoService {
-    List<Repo> getRepos();
+    List<Repo> getRepoList();
     Long createRepository(Path path) throws ServiceException;
 }

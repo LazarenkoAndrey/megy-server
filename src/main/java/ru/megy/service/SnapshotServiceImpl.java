@@ -37,7 +37,7 @@ public class SnapshotServiceImpl implements SnapshotService {
 
     @Transactional
     @Override
-    public List<SnapshotVersion> getVersions(Long repoId, int top) {
+    public List<SnapshotVersion> getVersionList(Long repoId, int top) {
         Pageable pageable = new PageRequest(0, top, new Sort(Sort.Direction.DESC, "createdDate"));
         Page<SnapshotVersion> pages;
 

@@ -42,7 +42,7 @@ public class BackupServiceImpl implements BackupService {
 
     @Transactional
     @Override
-    public List<Backup> getBackups() {
+    public List<Backup> getBackupList() {
         List<Backup> backupList = new ArrayList<>();
         backupRepository.findAll().forEach(backup -> backupList.add(backup));
 
@@ -86,7 +86,7 @@ public class BackupServiceImpl implements BackupService {
 
     @Transactional
     @Override
-    public List<BackupVersion> getVersions(Long backupId, int top) {
+    public List<BackupVersion> getVersionList(Long backupId, int top) {
         Pageable pageable = new PageRequest(0, top, new Sort(Sort.Direction.DESC, "createdDate"));
         Page<BackupVersion> pages;
 

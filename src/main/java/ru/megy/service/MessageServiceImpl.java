@@ -4,6 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -16,7 +20,9 @@ import ru.megy.repository.type.MessageStatusEnum;
 import javax.validation.constraints.NotNull;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Stream;
 
 @Service
@@ -39,7 +45,21 @@ public class MessageServiceImpl implements MessageService {
 
     @Transactional
     @Override
-    public void addMessage(String text) {
+    public List<Message> getMessageList(int top) {
+        Pageable pageable = new PageRequest(0, top, new Sort(Sort.Direction.DESC, "createdDate"));
+        Page<Message> pages;
+
+        pages = messageRepository.findAll(pageable);
+
+        List<Message> messageList = new ArrayList<>();
+        pages.forEach( message -> messageList.add(message));
+
+        return messageList;
+    }
+
+    @Transactional
+    @Override
+    public Long addMessage(String text) {
         Message message = new Message();
         message.setCreatedDate(new Date());
         message.setResendCounter(0L);
@@ -47,7 +67,9 @@ public class MessageServiceImpl implements MessageService {
         message.setSubject(mailSubject + " / " + getLocalName());
         message.setText(text);
 
-        messageRepository.save(message);
+        message = messageRepository.save(message);
+
+        return message.getId();
     }
 
     @Transactional

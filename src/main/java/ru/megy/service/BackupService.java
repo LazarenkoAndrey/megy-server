@@ -9,9 +9,9 @@ import java.nio.file.Path;
 import java.util.List;
 
 public interface BackupService {
-    List<Backup> getBackups();
+    List<Backup> getBackupList();
     Backup getBackup(Long id);
     Long createBackup(Long repoId, Path path) throws ServiceException;
-    List<BackupVersion> getVersions(Long backupId, int top);
+    List<BackupVersion> getVersionList(Long backupId, int top);
     Long sync(Long backupId, TaskThread taskThread) throws ServiceException;
 }

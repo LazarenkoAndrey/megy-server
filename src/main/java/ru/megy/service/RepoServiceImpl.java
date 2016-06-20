@@ -23,7 +23,7 @@ public class RepoServiceImpl implements RepoService {
 
     @Transactional
     @Override
-    public List<Repo> getRepos() {
+    public List<Repo> getRepoList() {
         List<Repo> repoList = new ArrayList<>();
         repoRepository.findAll().forEach(repo -> repoList.add(repo));
 

@@ -7,6 +7,6 @@ import ru.megy.service.entity.TaskThread;
 import java.util.List;
 
 public interface SnapshotService {
-    List<SnapshotVersion> getVersions(Long repoId, int top);
+    List<SnapshotVersion> getVersionList(Long repoId, int top);
     Long createSnapshot(Long repositoryId, boolean calcSha512, TaskThread taskThread) throws ServiceException;
 }

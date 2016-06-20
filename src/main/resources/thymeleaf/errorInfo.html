@@ -15,7 +15,7 @@
                     <dt>URL</dt>
                     <dd th:text="${url}" />
                     <dt>Timestamp</dt>
-                    <dd th:text="${#dates.format(timestamp)}" />
+                    <dd th:text="${timestamp} ? ${#dates.format(timestamp)}" />
                 </dl>
             </p>
         </div>
