@@ -17,9 +17,6 @@ public class Repo {
     @NotNull
     private String path;
 
-    @OneToMany(mappedBy = "repo", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<SnapshotVersion> SnapshotVersions;
-
     public Long getId() {
         return id;
     }
@@ -34,14 +31,6 @@ public class Repo {
 
     public void setPath(String path) {
         this.path = path;
-    }
-
-    public Set<SnapshotVersion> getSnapshotVersions() {
-        return SnapshotVersions;
-    }
-
-    public void setSnapshotVersions(Set<SnapshotVersion> snapshotVersions) {
-        this.SnapshotVersions = snapshotVersions;
     }
 
     @Override

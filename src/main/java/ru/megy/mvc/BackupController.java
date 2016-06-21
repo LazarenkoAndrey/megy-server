@@ -14,6 +14,7 @@ import ru.megy.exception.ViewException;
 import ru.megy.mvc.objects.BackupVO;
 import ru.megy.repository.entity.Backup;
 import ru.megy.repository.entity.BackupVersion;
+import ru.megy.repository.entity.Repo;
 import ru.megy.service.BackupService;
 import ru.megy.service.RepoService;
 import ru.megy.service.TaskRunnerService;
@@ -34,15 +35,6 @@ public class BackupController {
     @Autowired
     private TaskRunnerService taskRunnerService;
 
-    @RequestMapping("/pages/backupList")
-    public String backupList(@RequestParam(value = "selected", required=false) Long selected, Model model) {
-        List<Backup> backupList = backupService.getBackupList();
-        model.addAttribute("backupList", backupList);
-        model.addAttribute("selectedBackupId", selected);
-
-        return "/pages/backupList";
-    }
-
     @RequestMapping("/pages/backupView/{backupId}")
     public String backupView(@PathVariable("backupId") long backupId, Model model) {
         Backup backup = backupService.getBackup(backupId);
@@ -54,26 +46,24 @@ public class BackupController {
         return "/pages/backupView";
     }
 
-    private void addRepoList(Model model) {
-        model.addAttribute("repoList", repoService.getRepoList());
-    }
-
     @RequestMapping("/pages/backupCreate")
-    public String gotoBackupCreate(Model model) {
+    public String gotoBackupCreate(@RequestParam("repoId") long repoId, Model model) {
         if(!model.containsAttribute("backupVO")) {
-            model.addAttribute("backupVO", new BackupVO());
+            BackupVO backupVO = new BackupVO();
+            backupVO.setRepoId(repoId);
+            model.addAttribute("backupVO", backupVO);
         }
-
-        addRepoList(model);
+        Repo repo = repoService.getRepo(repoId);
+        model.addAttribute("repo", repo);
 
         return "/pages/backupCreate";
     }
 
-    @Secured("ADMIN")
+    @Secured("ROLE_ADMIN")
     @RequestMapping("/action/backup/add")
     public String repoAction(@Valid BackupVO backupVO, BindingResult bindingResult, Model model) throws ViewException {
         if(bindingResult.hasErrors()) {
-            return gotoBackupCreate(model);
+            return gotoBackupCreate(backupVO.getRepoId(), model);
         }
 
         Long backupId = null;
@@ -83,13 +73,13 @@ public class BackupController {
         } catch (Exception e) {
             logger.error("/action/backup/add", e);
             bindingResult.rejectValue("path", "backupCreate.exception", e.getMessage());
-            return gotoBackupCreate(model);
+            return gotoBackupCreate(backupVO.getRepoId(), model);
         }
 
-        return "redirect:/pages/backupList?selected="+backupId;
+        return "redirect:/pages/repoView/" + backupVO.getRepoId() + "?selected=" + backupId;
     }
 
-    @Secured("ADMIN")
+    @Secured("ROLE_ADMIN")
     @RequestMapping("/action/backup/sync")
     public String backupAction(@RequestParam("backupId") long backupId) throws ViewException {
         Long taskId = taskRunnerService.doBackupSync(backupId);

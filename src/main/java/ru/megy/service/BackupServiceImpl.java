@@ -10,12 +10,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.megy.exception.ServiceException;
-import ru.megy.processer.FileVisitorListener;
+import ru.megy.util.FileVisitorListener;
 import ru.megy.repository.*;
 import ru.megy.repository.entity.*;
 import ru.megy.repository.type.ItemTypeEnum;
 import ru.megy.service.entity.TaskThread;
 import ru.megy.util.FUtils;
+import ru.megy.util.objects.Item;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,6 +43,12 @@ public class BackupServiceImpl implements BackupService {
 
     @Transactional
     @Override
+    public Backup getBackup(Long id) {
+        return backupRepository.findOne(id);
+    }
+
+    @Transactional
+    @Override
     public List<Backup> getBackupList() {
         List<Backup> backupList = new ArrayList<>();
         backupRepository.findAll().forEach(backup -> backupList.add(backup));
@@ -51,8 +58,11 @@ public class BackupServiceImpl implements BackupService {
 
     @Transactional
     @Override
-    public Backup getBackup(Long id) {
-        return backupRepository.findOne(id);
+    public List<Backup> getBackupList(Repo repo) {
+        List<Backup> backupList = new ArrayList<>();
+        backupRepository.findAllByRepo(repo).forEach(backup -> backupList.add(backup));
+
+        return backupList;
     }
 
     @Transactional(rollbackFor = ServiceException.class)
@@ -112,16 +122,11 @@ public class BackupServiceImpl implements BackupService {
         }
         Repo repo = backup.getRepo();
 
-        SnapshotVersion snapshotVersion = new SnapshotVersion();
-        snapshotVersion.setCreatedDate(new Date());
-        snapshotVersion.setRepo(repo);
-        snapshotVersion.setCalcSha512(false);
-
-        FileVisitorListener fileVisitorListener = new FileVisitorListener(snapshotVersion, taskThread, 10.0f);
+        FileVisitorListener fileVisitorListener = new FileVisitorListener(repo, false, taskThread, 10.0f);
         try {
             Files.walkFileTree(fileVisitorListener.getRepoPath(), fileVisitorListener);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ServiceException(e);
         }
 
         Map<String, Item> mapItem = new HashMap<>();
@@ -231,7 +236,7 @@ public class BackupServiceImpl implements BackupService {
         Long size = FUtils.getSizeItems(pathFile);
 
         Store store = null;
-        List<Store> listStore = storeRepository.findAllBySha512(sha512);
+        List<Store> listStore = storeRepository.findAllByBackupAndSha512(newReserve.getBackup(), sha512);
         for(Store itemStore : listStore) {
             if(!itemStore.getSizeByte().equals(size)) {
                 continue;

@@ -17,8 +17,15 @@
             </thead>
             <tbody>
                 <tr th:each="repo : ${repoList}" th:class="${selectedRepoId} == ${repo.id} ? 'active'">
-                    <td th:text="${repo.id}"></td>
+                    <td>
+                        <a th:href="@{'/pages/repoView/' + ${repo.id}}" th:text="${repo.id}"/>
+                    </td>
                     <td th:text="${repo.path}"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-center" th:if="${#lists.isEmpty(repoList)}">
+                        No items
+                    </td>
                 </tr>
             </tbody>
         </table>

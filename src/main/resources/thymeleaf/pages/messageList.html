@@ -30,6 +30,11 @@
                     <td th:text="${message.sentDate} ? ${#dates.format(message.sentDate)}"></td>
                     <td th:text="${message.resendCounter}"></td>
                 </tr>
+                <tr>
+                    <td colspan="7" class="text-center" th:if="${#lists.isEmpty(messageList)}">
+                        No items
+                    </td>
+                </tr>
             </tbody>
         </table>
 

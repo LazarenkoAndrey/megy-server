@@ -1,12 +1,11 @@
-package ru.megy.processer;
+package ru.megy.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.megy.repository.entity.Item;
-import ru.megy.repository.entity.SnapshotVersion;
+import ru.megy.repository.entity.Repo;
+import ru.megy.util.objects.Item;
 import ru.megy.repository.type.ItemTypeEnum;
 import ru.megy.service.entity.TaskThread;
-import ru.megy.util.FUtils;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -17,7 +16,8 @@ import java.util.*;
 public class FileVisitorListener implements FileVisitor<Path> {
     private static final Logger logger = LoggerFactory.getLogger(FileVisitorListener.class);
 
-    private SnapshotVersion snapshotVersion;
+    private Repo repo;
+    private boolean calcSha512 = false;
     private TaskThread taskThread;
     private float maxPercent;
     private Path repoPath;
@@ -28,11 +28,12 @@ public class FileVisitorListener implements FileVisitor<Path> {
     private Item rootItem;
     private List<Item> itemList;
 
-    public FileVisitorListener(SnapshotVersion SnapshotVersion, TaskThread taskThread, float maxPercent) {
-        this.snapshotVersion = SnapshotVersion;
+    public FileVisitorListener(Repo repo, boolean calcSha512, TaskThread taskThread, float maxPercent) {
+        this.repo = repo;
+        this.calcSha512 = calcSha512;
         this.taskThread = taskThread;
         this.maxPercent = maxPercent;
-        repoPath = Paths.get(SnapshotVersion.getRepo().getPath());
+        repoPath = Paths.get(repo.getPath());
         cntItem = 0L;
         totalItem = FUtils.getCountItems(repoPath);
     }
@@ -46,7 +47,6 @@ public class FileVisitorListener implements FileVisitor<Path> {
         item.setChildes(new HashSet<>());
         item.setType(ItemTypeEnum.DIR);
         item.setPath(repoPath.relativize(dir).toString());
-        item.setVersions(snapshotVersion);
         item.setName(dir.getFileName().toString());
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(basicFileAttributes.lastModifiedTime().toMillis());
@@ -72,7 +72,6 @@ public class FileVisitorListener implements FileVisitor<Path> {
         Item item = new Item();
         item.setType(ItemTypeEnum.FILE);
         item.setPath(repoPath.relativize(file).toString());
-        item.setVersions(snapshotVersion);
         item.setName(file.getFileName().toString());
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(basicFileAttributes.lastModifiedTime().toMillis());
@@ -81,7 +80,7 @@ public class FileVisitorListener implements FileVisitor<Path> {
         item.setLength(0);
         item.setSizeByte(basicFileAttributes.size());
         item.setParent(currentDir);
-        if(snapshotVersion.getCalcSha512()) {
+        if(calcSha512) {
             item.setSha512(FUtils.sha512(file));
         }
         currentDir.getChildes().add(item);
@@ -110,7 +109,7 @@ public class FileVisitorListener implements FileVisitor<Path> {
         SortedSet<String> hashList = new TreeSet<>();
 
         for(Item item : currentDir.getChildes()) {
-            if(snapshotVersion.getCalcSha512()) {
+            if(calcSha512) {
                 hashList.add(item.getSha512());
             }
             sizeByte += item.getSizeByte();
@@ -119,7 +118,7 @@ public class FileVisitorListener implements FileVisitor<Path> {
         }
         currentDir.setSizeByte(sizeByte);
         currentDir.setLength(length);
-        if(snapshotVersion.getCalcSha512()) {
+        if(calcSha512) {
             currentDir.setSha512(FUtils.sha512(hashList));
         }
         currentDir = currentDir.getParent();

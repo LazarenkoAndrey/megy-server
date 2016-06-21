@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head th:replace="fragments/global :: head" />
+<body>
+    <nav th:replace="fragments/global :: navbar ('repoList')"/>
+
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">Repository item</div>
+            <div class="panel-body">
+                <ul class="list-inline">
+                    <li>
+                        <dl class="dl-horizontal">
+                            <dt>ID</dt>
+                            <dd th:text="${repo.id}" />
+                            <dt>Path</dt>
+                            <dd th:text="${repo.path}" />
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <table class="table table-hover">
+            <caption>Backup list</caption>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Backup path</th>
+                <th>Last Version</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!--/*@thymesVar id="backupList" type="java.util.List"*/-->
+            <tr th:each="backup : ${backupList}" th:class="${selectedBackupId} == ${backup.id} ? 'active'">
+                <!--/*@thymesVar id="backup" type="ru.megy.repository.entity.Backup"*/-->
+                <td>
+                    <a th:href="@{'/pages/backupView/' + ${backup.id}}" th:text="${backup.id}"/>
+                </td>
+                <td th:text="${backup.path}"></td>
+                <td>
+                    <ul class="list-unstyled" th:if="${backup.lastVersion} != null">
+                        <li th:text="${backup.lastVersion.id}"></li>
+                        <li th:text="${backup.lastVersion.createdDate} ? ${#dates.format(backup.lastVersion.createdDate)}"></li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" class="text-center" th:if="${#lists.isEmpty(backupList)}">
+                    No items
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <ul class="list-inline">
+            <li>
+                <a th:href="@{/pages/backupCreate(repoId=${repo.id})}" class="btn btn-default disableButtonOnClick" role="button">Add</a>
+            </li>
+        </ul>
+    </div>
+
+    <div th:replace="fragments/global :: script"/>
+</body>
+</html>

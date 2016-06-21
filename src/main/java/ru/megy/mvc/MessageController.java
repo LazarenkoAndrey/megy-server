@@ -42,7 +42,7 @@ public class MessageController {
         return "/pages/messageList";
     }
 
-    @Secured("ADMIN")
+    @Secured("ROLE_ADMIN")
     @RequestMapping("/action/message/sendTest")
     public String repoAction(Model model) throws ViewException {
         Long messageId = null;

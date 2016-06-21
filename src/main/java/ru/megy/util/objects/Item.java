@@ -1,4 +1,4 @@
-package ru.megy.repository.entity;
+package ru.megy.util.objects;
 
 import ru.megy.repository.type.ItemTypeEnum;
 
@@ -7,69 +7,16 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
 
-@Entity
-@Table(name = "FS_ITEM")
 public class Item {
-    @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="seqItemId")
-    @SequenceGenerator(name = "seqItemId", sequenceName = "SEQ_ITEM_ID")
-    @Column(name = "ID")
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "VERSION_ID", nullable = false)
-    private SnapshotVersion versions;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "TYPE")
-    @NotNull
     private ItemTypeEnum type;
-
-    @Column(name = "NAME")
-    @NotNull
     private String name;
-
-    @Column(name = "PATH")
     private String path;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PARENT_ID")
     private Item parent;
-
-    @OneToMany(mappedBy = "parent")
     private Set<Item> childes;
-
-    @Column(name = "SIZE_BYTE")
-    @NotNull
     private Long sizeByte;
-
-    @Column(name = "LENGTH")
-    @NotNull
     private Integer length;
-
-    @Column(name = "SHA512")
     private String sha512;
-
-    @Column(name = "LAST_MODIFIED")
-    @Temporal(TemporalType.TIMESTAMP)
-    @NotNull
     private Date lastModified;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public SnapshotVersion getVersions() {
-        return versions;
-    }
-
-    public void setVersions(SnapshotVersion versions) {
-        this.versions = versions;
-    }
 
     public ItemTypeEnum getType() {
         return type;
@@ -151,8 +98,6 @@ public class Item {
     @Override
     public String toString() {
         return "Item{" +
-                "id=" + id +
-                ", versions=" + versions.getId() +
                 ", type=" + type +
                 ", name='" + name + '\'' +
                 ", path='" + path + '\'' +

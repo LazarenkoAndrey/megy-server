@@ -5,13 +5,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.megy.exception.ViewException;
 import ru.megy.mvc.objects.RepoVO;
+import ru.megy.repository.entity.Backup;
+import ru.megy.repository.entity.BackupVersion;
 import ru.megy.repository.entity.Repo;
+import ru.megy.service.BackupService;
 import ru.megy.service.RepoService;
 
 import javax.validation.Valid;
@@ -25,6 +30,8 @@ public class RepoController {
 
     @Autowired
     private RepoService repoService;
+    @Autowired
+    private BackupService backupService;
 
     @RequestMapping("/pages/repoList")
     public String repoList(@RequestParam(value = "selected", required=false) Long selected, Model model) {
@@ -44,7 +51,7 @@ public class RepoController {
         return "/pages/repoCreate";
     }
 
-    @Secured("ADMIN")
+    @Secured("ROLE_ADMIN")
     @RequestMapping("/action/repo/add")
     public String repoAction(@Valid RepoVO repoVO, BindingResult bindingResult, Model model) throws ViewException {
         if(bindingResult.hasErrors()) {
@@ -63,4 +70,18 @@ public class RepoController {
 
         return "redirect:/pages/repoList?selected="+repoId;
     }
+
+    @RequestMapping("/pages/repoView/{repoId}")
+    public String repoView(@PathVariable("repoId") long repoId, @RequestParam(value = "selected", required=false) Long selected, Model model) {
+        Repo repo = repoService.getRepo(repoId);
+        model.addAttribute("repo", repo);
+
+        List<Backup> backupList = backupService.getBackupList(repo);
+        model.addAttribute("backupList", backupList);
+        model.addAttribute("selectedBackupId", selected);
+
+        return "/pages/repoView";
+    }
+
+
 }

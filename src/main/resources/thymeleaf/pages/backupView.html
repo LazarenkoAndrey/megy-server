@@ -4,7 +4,7 @@
       lang="en">
 <head th:replace="fragments/global :: head" />
 <body>
-    <nav th:replace="fragments/global :: navbar ('backupList')"/>
+    <nav th:replace="fragments/global :: navbar ('repoList')"/>
 
     <div class="container">
         <div class="panel panel-default">
@@ -53,6 +53,11 @@
                 <tr th:each="version : ${backupVersionList}">
                     <td th:text="${version.id}"/>
                     <td th:text="${version.createdDate} ? ${#dates.format(version.createdDate)}"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-center" th:if="${#lists.isEmpty(backupVersionList)}">
+                        No items
+                    </td>
                 </tr>
             </tbody>
         </table>

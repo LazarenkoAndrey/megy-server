@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.megy.exception.ServiceException;
 import ru.megy.repository.RepoRepository;
+import ru.megy.repository.entity.Backup;
 import ru.megy.repository.entity.Repo;
 
 import java.nio.file.Files;
@@ -20,6 +21,12 @@ public class RepoServiceImpl implements RepoService {
 
     @Autowired
     private RepoRepository repoRepository;
+
+    @Transactional
+    @Override
+    public Repo getRepo(Long id) {
+        return repoRepository.findOne(id);
+    }
 
     @Transactional
     @Override
