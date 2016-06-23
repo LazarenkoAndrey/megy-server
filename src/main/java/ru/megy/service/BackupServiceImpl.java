@@ -19,7 +19,12 @@ import ru.megy.util.FUtils;
 import ru.megy.util.objects.Item;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileLock;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,6 +34,7 @@ import java.util.*;
 @Service
 public class BackupServiceImpl implements BackupService {
     private static final Logger logger = LoggerFactory.getLogger(BackupServiceImpl.class);
+    private static final String LOCK_FILE_NAME = ".lock";
 
     @Autowired
     private BackupVersionRepository backupVersionRepository;
@@ -120,8 +126,11 @@ public class BackupServiceImpl implements BackupService {
         if(backup==null) {
             throw new ServiceException(String.format("Backup with id %d don't found", backupId));
         }
-        Repo repo = backup.getRepo();
 
+        // lock directory for backup
+        FileLock fileLock = lockBackup(backup);
+
+        Repo repo = backup.getRepo();
         FileVisitorListener fileVisitorListener = new FileVisitorListener(repo, false, taskThread, 10.0f);
         try {
             Files.walkFileTree(fileVisitorListener.getRepoPath(), fileVisitorListener);
@@ -200,6 +209,9 @@ public class BackupServiceImpl implements BackupService {
 
             reserveRepository.save(forSave);
             taskThread.setPercent(100.0f);
+
+            // unlock directory for backup
+            unlockBackup(fileLock);
         } catch (Exception e) {
             throw new ServiceException(e);
         }
@@ -289,4 +301,24 @@ public class BackupServiceImpl implements BackupService {
         return pathFile.toString();
     }
 
+    private FileLock lockBackup(Backup backup)  {
+        try {
+            String backupPath = backup.getPath();
+            String lockFileName = LOCK_FILE_NAME + backup.getId().toString();
+            Path pathLockFile = Paths.get(backupPath, lockFileName);
+            RandomAccessFile raFile = new RandomAccessFile(pathLockFile.toFile(), "rw");
+            FileLock fileLock = raFile.getChannel().tryLock();
+            String text = "BackupId: " + backup.getId().toString() + ", time: " + (new Date()).toString();
+            raFile.getChannel().write(ByteBuffer.wrap(text.getBytes(Charset.forName("UTF-8"))));
+
+            return fileLock;
+        } catch (IOException e) {
+            logger.warn("tryLock", e);
+            return null;
+        }
+    }
+
+    private void unlockBackup(FileLock fileLock) throws IOException {
+        fileLock.release();
+    }
 }
