@@ -16,7 +16,6 @@ import java.util.*;
 public class FileVisitorListener implements FileVisitor<Path> {
     private static final Logger logger = LoggerFactory.getLogger(FileVisitorListener.class);
 
-    private Repo repo;
     private boolean calcSha512 = false;
     private TaskThread taskThread;
     private float maxPercent;
@@ -29,7 +28,6 @@ public class FileVisitorListener implements FileVisitor<Path> {
     private List<Item> itemList;
 
     public FileVisitorListener(Repo repo, boolean calcSha512, TaskThread taskThread, float maxPercent) {
-        this.repo = repo;
         this.calcSha512 = calcSha512;
         this.taskThread = taskThread;
         this.maxPercent = maxPercent;
@@ -59,7 +57,7 @@ public class FileVisitorListener implements FileVisitor<Path> {
             currentDir.getChildes().add(item);
         }
         currentDir = item;
-        addStore(item);
+        addItem(item);
 
         return FileVisitResult.CONTINUE;
     }
@@ -84,7 +82,7 @@ public class FileVisitorListener implements FileVisitor<Path> {
             item.setSha512(FUtils.sha512(file));
         }
         currentDir.getChildes().add(item);
-        addStore(item);
+        addItem(item);
 
         cntItem++;
         taskThread.setPercent(maxPercent * cntItem / totalItem);
@@ -98,8 +96,7 @@ public class FileVisitorListener implements FileVisitor<Path> {
 
     @Override
     public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
-        logger.error("visitFileFailed {}", file.toString(), exc);
-        return FileVisitResult.CONTINUE;
+        throw new IOException(exc);
     }
 
     @Override
@@ -134,7 +131,7 @@ public class FileVisitorListener implements FileVisitor<Path> {
 
     }
 
-    private void addStore(Item item) {
+    private void addItem(Item item) {
         if(itemList ==null) {
             itemList = new ArrayList<>();
         }

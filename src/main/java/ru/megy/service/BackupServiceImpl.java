@@ -122,43 +122,37 @@ public class BackupServiceImpl implements BackupService {
     @Transactional(rollbackFor = ServiceException.class)
     @Override
     public Long sync(Long backupId, TaskThread taskThread) throws ServiceException {
-        Backup backup = backupRepository.findOne(backupId);
-        if(backup==null) {
-            throw new ServiceException(String.format("Backup with id %d don't found", backupId));
-        }
-
-        // lock directory for backup
-        FileLock fileLock = lockBackup(backup);
-
-        Repo repo = backup.getRepo();
-        FileVisitorListener fileVisitorListener = new FileVisitorListener(repo, false, taskThread, 10.0f);
         try {
+            Backup backup = backupRepository.findOne(backupId);
+            if(backup==null) {
+                throw new ServiceException(String.format("Backup with id %d don't found", backupId));
+            }
+
+            FileLock fileLock = lockBackup(backup);
+            Repo repo = backup.getRepo();
+            FileVisitorListener fileVisitorListener = new FileVisitorListener(repo, false, taskThread, 10.0f);
             Files.walkFileTree(fileVisitorListener.getRepoPath(), fileVisitorListener);
-        } catch (IOException e) {
-            throw new ServiceException(e);
-        }
 
-        Map<String, Item> mapItem = new HashMap<>();
-        for(Item item : fileVisitorListener.getItemList()) {
-            mapItem.put(item.getPath(), item);
-        }
+            Map<String, Item> mapItem = new HashMap<>();
+            for(Item item : fileVisitorListener.getItemList()) {
+                mapItem.put(item.getPath(), item);
+            }
 
-        BackupVersion backupVersion = new BackupVersion();
-        backupVersion.setCreatedDate(new Date());
-        backupVersion.setBackup(backup);
-        backupVersion = backupVersionRepository.save(backupVersion);
-        backup.setLastVersion(backupVersion);
-        backupRepository.save(backup);
+            BackupVersion backupVersion = new BackupVersion();
+            backupVersion.setCreatedDate(new Date());
+            backupVersion.setBackup(backup);
+            backupVersion = backupVersionRepository.save(backupVersion);
+            backup.setLastVersion(backupVersion);
+            backup = backupRepository.save(backup);
 
-        List<Reserve> reserveList = reserveRepository.findAllByBackupAndVersion(backup, backup.getLastVersion()!=null ? backup.getLastVersion().getId() : null);
+            List<Reserve> reserveList = reserveRepository.findAllByBackupAndVersion(backup, backup.getLastVersion()!=null ? backup.getLastVersion().getId() : null);
 
-        Map<String, Reserve> mapReserve = new HashMap<>();
-        for(Reserve reserve : reserveList) {
-            mapReserve.put(reserve.getPath(), reserve);
-        }
+            Map<String, Reserve> mapReserve = new HashMap<>();
+            for(Reserve reserve : reserveList) {
+                mapReserve.put(reserve.getPath(), reserve);
+            }
 
-        taskThread.setPercent(20.0f);
-        try {
+            taskThread.setPercent(20.0f);
             int totalItem = reserveList.size();
             int cntItem = 0;
             List<Reserve> forSave = new ArrayList<>();
@@ -209,14 +203,12 @@ public class BackupServiceImpl implements BackupService {
 
             reserveRepository.save(forSave);
             taskThread.setPercent(100.0f);
-
-            // unlock directory for backup
             unlockBackup(fileLock);
+
+            return backupVersion.getId();
         } catch (Exception e) {
             throw new ServiceException(e);
         }
-
-        return backupVersion.getId();
     }
 
     private Reserve reserveNew(Item item, BackupVersion backupVersion) throws IOException {
@@ -301,21 +293,16 @@ public class BackupServiceImpl implements BackupService {
         return pathFile.toString();
     }
 
-    private FileLock lockBackup(Backup backup)  {
-        try {
-            String backupPath = backup.getPath();
-            String lockFileName = LOCK_FILE_NAME + backup.getId().toString();
-            Path pathLockFile = Paths.get(backupPath, lockFileName);
-            RandomAccessFile raFile = new RandomAccessFile(pathLockFile.toFile(), "rw");
-            FileLock fileLock = raFile.getChannel().tryLock();
-            String text = "BackupId: " + backup.getId().toString() + ", time: " + (new Date()).toString();
-            raFile.getChannel().write(ByteBuffer.wrap(text.getBytes(Charset.forName("UTF-8"))));
+    private FileLock lockBackup(Backup backup) throws IOException {
+        String backupPath = backup.getPath();
+        String lockFileName = LOCK_FILE_NAME + backup.getId().toString();
+        Path pathLockFile = Paths.get(backupPath, lockFileName);
+        RandomAccessFile raFile = new RandomAccessFile(pathLockFile.toFile(), "rw");
+        FileLock fileLock = raFile.getChannel().tryLock();
+        String text = "BackupId: " + backup.getId().toString() + ", time: " + (new Date()).toString();
+        raFile.getChannel().write(ByteBuffer.wrap(text.getBytes(Charset.forName("UTF-8"))));
 
-            return fileLock;
-        } catch (IOException e) {
-            logger.warn("tryLock", e);
-            return null;
-        }
+        return fileLock;
     }
 
     private void unlockBackup(FileLock fileLock) throws IOException {
