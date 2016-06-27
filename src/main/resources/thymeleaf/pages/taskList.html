@@ -62,7 +62,7 @@
                 <td th:text="${task.id}"></td>
                 <td th:text="${task.status}"></td>
                 <td th:text="${task.name}"></td>
-                <td th:text="${task.finishTime} ? ${#dates.format(task.finishTime)}"></td>
+                <td th:text="${task.finishTime} ? ${#dates.format(task.finishTime, '__#{date.format}__')}"></td>
                 <td th:text="${task.stopping}"></td>
                 <td th:text="${task.message}"></td>
             </tr>

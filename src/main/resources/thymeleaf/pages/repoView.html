@@ -45,7 +45,7 @@
                 <td>
                     <ul class="list-unstyled" th:if="${backup.lastVersion} != null">
                         <li th:text="${backup.lastVersion.id}"></li>
-                        <li th:text="${backup.lastVersion.createdDate} ? ${#dates.format(backup.lastVersion.createdDate)}"></li>
+                        <li th:text="${backup.lastVersion.createdDate} ? ${#dates.format(backup.lastVersion.createdDate, '__#{date.format}__')}"></li>
                     </ul>
                 </td>
             </tr>

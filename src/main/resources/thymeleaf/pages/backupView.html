@@ -52,7 +52,7 @@
             <tbody>
                 <tr th:each="version : ${backupVersionList}">
                     <td th:text="${version.id}"/>
-                    <td th:text="${version.createdDate} ? ${#dates.format(version.createdDate)}"></td>
+                    <td th:text="${version.createdDate} ? ${#dates.format(version.createdDate, '__#{date.format}__')}"></td>
                 </tr>
                 <tr>
                     <td colspan="2" class="text-center" th:if="${#lists.isEmpty(backupVersionList)}">

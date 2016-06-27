@@ -26,8 +26,8 @@
                     <td th:text="${message.status}"></td>
                     <td th:text="${message.subject}"></td>
                     <td th:text="${message.text}"></td>
-                    <td th:text="${message.createdDate} ? ${#dates.format(message.createdDate)}"></td>
-                    <td th:text="${message.sentDate} ? ${#dates.format(message.sentDate)}"></td>
+                    <td th:text="${message.createdDate} ? ${#dates.format(message.createdDate, '__#{date.format}__')}"></td>
+                    <td th:text="${message.sentDate} ? ${#dates.format(message.sentDate, '__#{date.format}__')}"></td>
                     <td th:text="${message.resendCounter}"></td>
                 </tr>
                 <tr>

@@ -128,8 +128,16 @@ public class BackupServiceImpl implements BackupService {
                 throw new ServiceException(String.format("Backup with id %d don't found", backupId));
             }
 
-            FileLock fileLock = lockBackup(backup);
+            if(!Paths.get(backup.getPath()).toFile().exists()) {
+                throw new FileNotFoundException("Files directory not found. " + backup.getPath());
+            }
+
             Repo repo = backup.getRepo();
+            if(!Paths.get(repo.getPath()).toFile().exists()) {
+                throw new FileNotFoundException("Files directory not found. " + repo.getPath());
+            }
+
+            FileLock fileLock = lockBackup(backup);
             FileVisitorListener fileVisitorListener = new FileVisitorListener(repo, false, taskThread, 10.0f);
             Files.walkFileTree(fileVisitorListener.getRepoPath(), fileVisitorListener);
 
