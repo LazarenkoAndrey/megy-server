@@ -7,37 +7,40 @@
     <nav th:replace="fragments/global :: navbar ('repoList')"/>
 
     <div class="container">
-        <div class="panel panel-default">
-            <div class="panel-heading">Backup item</div>
-            <div class="panel-body">
-                <ul class="list-inline">
-                    <li>
-                        <dl class="dl-horizontal">
-                            <dt>ID</dt>
-                            <dd th:text="${backup.id}" />
-                            <dt>Path</dt>
-                            <dd th:text="${backup.path}" />
-                        </dl>
-                    </li>
-                    <li>
-                        <dl class="dl-horizontal">
-                            <dt>Repository ID</dt>
-                            <dd th:text="${backup.repo.id}" />
-                            <dt>Repository path</dt>
-                            <dd th:text="${backup.repo.path}" />
-                        </dl>
-                    </li>
-                </ul>
-                <ul class="list-inline">
-                    <li>
-                        <form th:action="@{/action/backup/sync}" method="post">
-                            <input type="hidden" name="backupId" th:value="${backup.id}" />
-                            <input type="submit" value="Synchronize" class="btn btn-default disableButtonOnClick" />
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading"><small>Repository item</small></h4>
+                <div class="list-group-item-text">
+                    <dl class="dl-horizontal">
+                        <dt>ID</dt>
+                        <dd>
+                            <a th:href="@{'/pages/repoView/' + ${backup.repo.id}}" th:text="${backup.repo.id}"/>
+                        </dd>
+                        <dt>Path</dt>
+                        <dd th:text="${backup.repo.path}" />
+                    </dl>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading">Backup item</h4>
+                <div class="list-group-item-text">
+                    <dl class="dl-horizontal">
+                        <dt>ID</dt>
+                        <dd th:text="${backup.id}" />
+                        <dt>Path</dt>
+                        <dd th:text="${backup.path}" />
+                    </dl>
+                    <ul class="list-inline">
+                        <li>
+                            <form th:action="@{/action/backup/sync}" method="post">
+                                <input type="hidden" name="backupId" th:value="${backup.id}" />
+                                <input type="submit" value="Synchronize" class="btn btn-default disableButtonOnClick" />
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
     </div>
 
     <div class="container">
@@ -51,7 +54,9 @@
             </thead>
             <tbody>
                 <tr th:each="version : ${backupVersionList}">
-                    <td th:text="${version.id}"/>
+                    <td>
+                        <a th:href="@{'/pages/versionView/' + ${version.id}}" th:text="${version.id}"/>
+                    </td>
                     <td th:text="${version.createdDate} ? ${#dates.format(version.createdDate, '__#{date.format}__')}"></td>
                 </tr>
                 <tr>

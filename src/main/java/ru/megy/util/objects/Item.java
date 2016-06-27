@@ -2,8 +2,6 @@ package ru.megy.util.objects;
 
 import ru.megy.repository.type.ItemTypeEnum;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
 

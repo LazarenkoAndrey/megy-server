@@ -16,6 +16,7 @@ import ru.megy.repository.entity.Backup;
 import ru.megy.repository.entity.BackupVersion;
 import ru.megy.repository.entity.Repo;
 import ru.megy.service.BackupService;
+import ru.megy.service.BackupVersionService;
 import ru.megy.service.RepoService;
 import ru.megy.service.TaskRunnerService;
 
@@ -31,6 +32,8 @@ public class BackupController {
     @Autowired
     private BackupService backupService;
     @Autowired
+    private BackupVersionService backupVersionService;
+    @Autowired
     private RepoService repoService;
     @Autowired
     private TaskRunnerService taskRunnerService;
@@ -40,7 +43,7 @@ public class BackupController {
         Backup backup = backupService.getBackup(backupId);
         model.addAttribute("backup", backup);
 
-        List<BackupVersion> backupVersionList = backupService.getVersionList(backupId, 100);
+        List<BackupVersion> backupVersionList = backupVersionService.getVersionList(backupId, 100);
         model.addAttribute("backupVersionList", backupVersionList);
 
         return "/pages/backupView";

@@ -1,6 +1,5 @@
 package ru.megy.service;
 
-import org.springframework.transaction.annotation.Transactional;
 import ru.megy.exception.ServiceException;
 import ru.megy.repository.entity.Repo;
 

@@ -3,19 +3,15 @@ package ru.megy.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.megy.exception.ServiceException;
-import ru.megy.util.FileVisitorListener;
 import ru.megy.repository.*;
 import ru.megy.repository.entity.*;
 import ru.megy.repository.type.ItemTypeEnum;
 import ru.megy.service.entity.TaskThread;
 import ru.megy.util.FUtils;
+import ru.megy.util.FileVisitorListener;
 import ru.megy.util.objects.Item;
 
 import java.io.File;
@@ -98,25 +94,6 @@ public class BackupServiceImpl implements BackupService {
         backup = backupRepository.save(backup);
 
         return backup.getId();
-    }
-
-    @Transactional
-    @Override
-    public List<BackupVersion> getVersionList(Long backupId, int top) {
-        Pageable pageable = new PageRequest(0, top, new Sort(Sort.Direction.DESC, "createdDate"));
-        Page<BackupVersion> pages;
-
-        if(backupId!=null) {
-            Backup backup = backupRepository.findOne(backupId);
-            pages = backupVersionRepository.findAllByBackup(backup, pageable);
-        } else {
-            pages = backupVersionRepository.findAll(pageable);
-        }
-
-        List<BackupVersion> backupVersionList = new ArrayList<>();
-        pages.forEach(version -> backupVersionList.add(version));
-
-        return backupVersionList;
     }
 
     @Transactional(rollbackFor = ServiceException.class)

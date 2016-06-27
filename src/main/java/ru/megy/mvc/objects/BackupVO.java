@@ -2,11 +2,9 @@ package ru.megy.mvc.objects;
 
 
 import org.hibernate.validator.constraints.NotEmpty;
-import ru.megy.repository.entity.Repo;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 public class BackupVO {
     @NotEmpty

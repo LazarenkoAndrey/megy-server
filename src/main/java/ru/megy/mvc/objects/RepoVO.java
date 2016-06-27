@@ -2,6 +2,7 @@ package ru.megy.mvc.objects;
 
 
 import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.validation.constraints.Size;
 
 public class RepoVO {

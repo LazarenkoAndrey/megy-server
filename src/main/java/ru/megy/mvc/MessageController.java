@@ -3,27 +3,15 @@ package ru.megy.mvc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Role;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.megy.exception.ViewException;
-import ru.megy.mvc.objects.BackupVO;
-import ru.megy.repository.entity.Backup;
-import ru.megy.repository.entity.BackupVersion;
 import ru.megy.repository.entity.Message;
-import ru.megy.service.BackupService;
 import ru.megy.service.MessageService;
-import ru.megy.service.RepoService;
-import ru.megy.service.TaskRunnerService;
 
-import javax.validation.Valid;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @Controller

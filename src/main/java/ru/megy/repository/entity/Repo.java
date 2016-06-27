@@ -2,7 +2,6 @@ package ru.megy.repository.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Set;
 
 @Entity
 @Table(name = "FS_REPO")

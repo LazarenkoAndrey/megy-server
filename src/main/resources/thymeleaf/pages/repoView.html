@@ -7,21 +7,19 @@
     <nav th:replace="fragments/global :: navbar ('repoList')"/>
 
     <div class="container">
-        <div class="panel panel-default">
-            <div class="panel-heading">Repository item</div>
-            <div class="panel-body">
-                <ul class="list-inline">
-                    <li>
-                        <dl class="dl-horizontal">
-                            <dt>ID</dt>
-                            <dd th:text="${repo.id}" />
-                            <dt>Path</dt>
-                            <dd th:text="${repo.path}" />
-                        </dl>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading">Repository item</h4>
+                <div class="list-group-item-text">
+                    <dl class="dl-horizontal">
+                        <dt>ID</dt>
+                        <dd th:text="${repo.id}" />
+                        <dt>Path</dt>
+                        <dd th:text="${repo.path}" />
+                    </dl>
+                </div>
+            </li>
+        </ul>
     </div>
 
     <div class="container">

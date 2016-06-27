@@ -7,8 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.megy.service.BackupService;
-import ru.megy.service.RepoService;
 import ru.megy.service.TaskService;
 import ru.megy.service.entity.TaskThread;
 

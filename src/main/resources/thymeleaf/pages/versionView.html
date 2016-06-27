@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head th:replace="fragments/global :: head" />
+<body>
+    <nav th:replace="fragments/global :: navbar ('repoList')"/>
+
+    <div class="container">
+        <ul class="list-group">
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading"><small>Repository item</small></h4>
+                <div class="list-group-item-text">
+                    <dl class="dl-horizontal">
+                        <dt>ID</dt>
+                        <dd>
+                            <a th:href="@{'/pages/repoView/' + ${version.backup.repo.id}}" th:text="${version.backup.repo.id}"/>
+                        </dd>
+                        <dt>Path</dt>
+                        <dd th:text="${version.backup.repo.path}" />
+                    </dl>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading"><small>Backup item</small></h4>
+                <div class="list-group-item-text">
+                    <dl class="dl-horizontal">
+                        <dt>ID</dt>
+                        <dd>
+                            <a th:href="@{'/pages/backupView/' + ${version.backup.id}}" th:text="${version.backup.id}"/>
+                        </dd>
+                        <dt>Path</dt>
+                        <dd th:text="${version.backup.path}" />
+                    </dl>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading">Version item</h4>
+                <div class="list-group-item-text">
+                    <dl class="dl-horizontal">
+                        <dt>ID</dt>
+                        <dd th:text="${version.id}" />
+                        <dt>Created date</dt>
+                        <dd th:text="${version.createdDate} ? ${#dates.format(version.createdDate, '__#{date.format}__')}" />
+                    </dl>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div th:replace="fragments/global :: script"/>
+</body>
+</html>

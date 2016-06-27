@@ -1,6 +1,7 @@
 package ru.megy.service;
 
 import ru.megy.service.entity.TaskThread;
+
 import java.util.List;
 
 public interface TaskService {

@@ -5,7 +5,8 @@ import org.slf4j.LoggerFactory;
 import ru.megy.exception.ServiceException;
 import ru.megy.service.TaskService;
 import ru.megy.service.type.TaskStatusEnum;
-import java.util.*;
+
+import java.util.Date;
 
 public abstract class TaskThread {
     private static final Logger logger = LoggerFactory.getLogger(TaskThread.class);

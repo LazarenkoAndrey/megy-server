@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
-import ru.megy.exception.ServiceException;
 import ru.megy.service.entity.ResultCheckFileSystem;
 
 import javax.validation.constraints.NotNull;
