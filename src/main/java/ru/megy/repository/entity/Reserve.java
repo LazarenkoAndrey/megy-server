@@ -22,11 +22,11 @@ public class Reserve {
 
     @Column(name = "VERSION_ID")
     @NotNull
-    private Long versionsId;
+    private Long versionId;
 
     @Column(name = "LAST_VERSION_ID")
     @NotNull
-    private Long lastVersionsId;
+    private Long lastVersionId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "TYPE")
@@ -73,20 +73,20 @@ public class Reserve {
         this.backup = backup;
     }
 
-    public Long getVersionsId() {
-        return versionsId;
+    public Long getVersionId() {
+        return versionId;
     }
 
-    public void setVersionsId(Long versionsId) {
-        this.versionsId = versionsId;
+    public void setVersionId(Long versionId) {
+        this.versionId = versionId;
     }
 
-    public Long getLastVersionsId() {
-        return lastVersionsId;
+    public Long getLastVersionId() {
+        return lastVersionId;
     }
 
-    public void setLastVersionsId(Long lastVersionsId) {
-        this.lastVersionsId = lastVersionsId;
+    public void setLastVersionId(Long lastVersionId) {
+        this.lastVersionId = lastVersionId;
     }
 
     public ItemTypeEnum getType() {
@@ -154,8 +154,8 @@ public class Reserve {
         return "Reserve{" +
                 "id=" + id +
                 ", backup=" + backup.getId() +
-                ", versionsId=" + versionsId +
-                ", lastVersionsId=" + lastVersionsId +
+                ", versionId=" + versionId +
+                ", lastVersionId=" + lastVersionId +
                 ", type=" + type +
                 ", name='" + name + '\'' +
                 ", path='" + path + '\'' +

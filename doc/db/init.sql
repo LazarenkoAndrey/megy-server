@@ -73,4 +73,4 @@ CREATE INDEX FS_MESSAGE_STATUS ON FS_MESSAGE (STATUS);
 
 ---------------------------------------------------------------
 --DROP TABLE FS_SNAPSHOT_VERSION
---DROP TABLE FS_FS_ITEM
+--DROP TABLE FS_ITEM

@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.megy.repository.entity.BackupVersion;
 import ru.megy.service.BackupVersionService;
+import ru.megy.service.entity.BackupVersionStatistic;
+
+import java.util.List;
 
 @Controller
 public class VersionController {
@@ -20,7 +23,10 @@ public class VersionController {
     @RequestMapping("/pages/versionView/{versionId}")
     public String backupView(@PathVariable("versionId") long versionId, Model model) {
         BackupVersion backupVersion = backupVersionService.getVersion(versionId);
+        List<BackupVersionStatistic> statisticList = backupVersionService.getStatistics(backupVersion);
+
         model.addAttribute("version", backupVersion);
+        model.addAttribute("statisticList", statisticList);
 
         return "/pages/versionView";
     }

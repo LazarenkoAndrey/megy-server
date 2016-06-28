@@ -145,7 +145,7 @@ public class BackupServiceImpl implements BackupService {
                 String path = reserve.getPath();
                 Item item = mapItem.get(path);
                 if (item == null) {
-                    reserve.setLastVersionsId(backupVersion.getId() - 1);
+                    reserve.setLastVersionId(backupVersion.getId() - 1);
                     forSave.add(reserve);
                     logger.debug("{} DELETE {}", reserve.getBackup().getId(), reserve.getPath());
                 } else if (!item.getLastModified().equals(reserve.getLastModified())
@@ -154,7 +154,7 @@ public class BackupServiceImpl implements BackupService {
                         || !item.getSizeByte().equals(reserve.getSizeByte())) {
                     Reserve newReserve = reserveNew(item, backupVersion);
                     forSave.add(newReserve);
-                    reserve.setLastVersionsId(backupVersion.getId() - 1);
+                    reserve.setLastVersionId(backupVersion.getId() - 1);
                     forSave.add(reserve);
                     logger.debug("{} UPDATE {}", reserve.getBackup().getId(), reserve.getPath());
                 }
@@ -204,8 +204,8 @@ public class BackupServiceImpl implements BackupService {
         newReserve.setSizeByte(item.getSizeByte());
         newReserve.setLength(item.getLength());
         newReserve.setType(item.getType());
-        newReserve.setVersionsId(backupVersion.getId());
-        newReserve.setLastVersionsId(BackupVersion.MAX_VERSION);
+        newReserve.setVersionId(backupVersion.getId());
+        newReserve.setLastVersionId(BackupVersion.MAX_VERSION);
         newReserve.setLastModified(item.getLastModified());
 
         if(item.getType() == ItemTypeEnum.FILE) {

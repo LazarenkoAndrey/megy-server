@@ -13,6 +13,7 @@ import ru.megy.repository.BackupRepository;
 import ru.megy.repository.BackupVersionRepository;
 import ru.megy.repository.entity.Backup;
 import ru.megy.repository.entity.BackupVersion;
+import ru.megy.service.entity.BackupVersionStatistic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,5 +50,27 @@ public class BackupVersionServiceImpl implements BackupVersionService {
         pages.forEach(version -> backupVersionList.add(version));
 
         return backupVersionList;
+    }
+
+    @Transactional
+    @Override
+    public List<BackupVersionStatistic> getStatistics(BackupVersion backupVersion) {
+        Long backupId = backupVersion.getBackup().getId();
+        Long versionId = backupVersion.getId();
+
+        BackupVersionStatistic statistic;
+        List<BackupVersionStatistic> list = new ArrayList<>();
+
+        statistic = new BackupVersionStatistic();
+        statistic.setName("Total files size (byte)");
+        statistic.setValue(backupVersionRepository.getTotalSize(backupId, versionId));
+        list.add(statistic);
+
+        statistic = new BackupVersionStatistic();
+        statistic.setName("Total number of files");
+        statistic.setValue(backupVersionRepository.getTotalFiles(backupId, versionId));
+        list.add(statistic);
+
+        return list;
     }
 }

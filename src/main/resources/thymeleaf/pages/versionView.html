@@ -48,6 +48,29 @@
         </ul>
     </div>
 
+    <div class="container">
+        <table class="table table-hover">
+            <caption>Statistics</caption>
+            <thead>
+            <tr>
+                <th class="col-md-4">Name</th>
+                <th class="col-md-8">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="statistic : ${statisticList}">
+                <td th:text="${statistic.name}"></td>
+                <td th:text="${#numbers.formatInteger(statistic.value, 1, 'WHITESPACE')}"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-center" th:if="${#lists.isEmpty(statisticList)}">
+                    No items
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
     <div th:replace="fragments/global :: script"/>
 </body>
 </html>
