@@ -34,7 +34,8 @@ public interface BackupVersionRepository extends CrudRepository<BackupVersion, L
     Long getNumberUpdatedItems(@Param("itemType") ItemTypeEnum itemType, @Param("backupId") Long backupId, @Param("versionId") Long versionId);
 
     @Query("select count(s) from Store s where s.backup.id = :backupId " +
-            "    and not exists(select o from Reserve o join o.store os where o.backup.id = :backupId and :versionId - 1L between o.versionId and o.lastVersionId and os.id=s.id)")
+            "    and exists(select o from Reserve o where o.backup.id = :backupId and :versionId = o.versionId and o.store.id=s.id)" +
+            "    and not exists(select o from Reserve o where o.backup.id = :backupId and :versionId - 1L between o.versionId and o.lastVersionId and o.store.id=s.id)")
     Long getNumberNewStorages(@Param("backupId") Long backupId, @Param("versionId") Long versionId);
 
 }

@@ -17,6 +17,7 @@ public abstract class TaskThread {
     private long finishTime;
     private float percent;
     private String message;
+    private String resultUrl;
     private TaskService taskService;
     private Thread thread;
 
@@ -116,6 +117,14 @@ public abstract class TaskThread {
 
     public String getMessage() {
         return message;
+    }
+
+    public String getResultUrl() {
+        return resultUrl;
+    }
+
+    public void setResultUrl(String resultUrl) {
+        this.resultUrl = resultUrl;
     }
 
     @Override

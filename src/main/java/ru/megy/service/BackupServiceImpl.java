@@ -99,22 +99,22 @@ public class BackupServiceImpl implements BackupService {
     @Transactional(rollbackFor = ServiceException.class)
     @Override
     public Long sync(Long backupId, TaskThread taskThread) throws ServiceException {
-        try {
-            Backup backup = backupRepository.findOne(backupId);
-            if(backup==null) {
-                throw new ServiceException(String.format("Backup with id %d don't found", backupId));
-            }
+        Backup backup = backupRepository.findOne(backupId);
+        if(backup==null) {
+            throw new ServiceException(String.format("Backup with id %d don't found", backupId));
+        }
 
-            if(!Paths.get(backup.getPath()).toFile().exists()) {
-                throw new FileNotFoundException("Files directory not found. " + backup.getPath());
-            }
+        if(!Paths.get(backup.getPath()).toFile().exists()) {
+            throw new ServiceException("Files directory not found. " + backup.getPath());
+        }
 
-            Repo repo = backup.getRepo();
-            if(!Paths.get(repo.getPath()).toFile().exists()) {
-                throw new FileNotFoundException("Files directory not found. " + repo.getPath());
-            }
+        Repo repo = backup.getRepo();
+        if(!Paths.get(repo.getPath()).toFile().exists()) {
+            throw new ServiceException("Files directory not found. " + repo.getPath());
+        }
 
-            FileLock fileLock = lockBackup(backup);
+
+        try(FileLock fileLock = lockBackup(backup)) {
             FileVisitorListener fileVisitorListener = new FileVisitorListener(repo, false, taskThread, 10.0f);
             Files.walkFileTree(fileVisitorListener.getRepoPath(), fileVisitorListener);
 
@@ -188,6 +188,7 @@ public class BackupServiceImpl implements BackupService {
 
             reserveRepository.save(forSave);
             taskThread.setPercent(100.0f);
+            taskThread.setResultUrl("/pages/versionView/"+backupVersion.getId());
             unlockBackup(fileLock);
 
             return backupVersion.getId();

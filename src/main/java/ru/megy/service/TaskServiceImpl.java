@@ -53,4 +53,14 @@ public class TaskServiceImpl implements TaskService {
             completedTaskList.subList(0, completedTaskList.size()-21).clear();
         }
     }
+
+    @Override
+    public TaskThread findActiveTask(Long taskId) {
+        for(TaskThread taskThread : activeTaskList) {
+            if(taskThread.getId()==taskId.longValue()) {
+                return taskThread;
+            }
+        }
+        return null;
+    }
 }
