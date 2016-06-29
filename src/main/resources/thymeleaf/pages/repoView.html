@@ -26,32 +26,32 @@
         <table class="table table-hover">
             <caption>Backup list</caption>
             <thead>
-            <tr>
-                <th>ID</th>
-                <th>Backup path</th>
-                <th>Last Version</th>
-            </tr>
+                <tr>
+                    <th>ID</th>
+                    <th>Backup path</th>
+                    <th>Last Version</th>
+                </tr>
             </thead>
             <tbody>
-            <!--/*@thymesVar id="backupList" type="java.util.List"*/-->
-            <tr th:each="backup : ${backupList}" th:class="${selectedBackupId} == ${backup.id} ? 'active'">
-                <!--/*@thymesVar id="backup" type="ru.megy.repository.entity.Backup"*/-->
-                <td>
-                    <a th:href="@{'/pages/backupView/' + ${backup.id}}" th:text="${backup.id}"/>
-                </td>
-                <td th:text="${backup.path}"></td>
-                <td>
-                    <ul class="list-unstyled" th:if="${backup.lastVersion} != null">
-                        <li th:text="${backup.lastVersion.id}"></li>
-                        <li th:text="${backup.lastVersion.createdDate} ? ${#dates.format(backup.lastVersion.createdDate, '__#{date.format}__')}"></li>
-                    </ul>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3" class="text-center" th:if="${#lists.isEmpty(backupList)}">
-                    No items
-                </td>
-            </tr>
+                <!--/*@thymesVar id="backupList" type="java.util.List"*/-->
+                <tr th:each="backup : ${backupList}" th:class="${selectedBackupId} == ${backup.id} ? 'active'">
+                    <!--/*@thymesVar id="backup" type="ru.megy.repository.entity.Backup"*/-->
+                    <td>
+                        <a th:href="@{'/pages/backupView/' + ${backup.id}}" th:text="${backup.id}"/>
+                    </td>
+                    <td th:text="${backup.path}"></td>
+                    <td>
+                        <ul class="list-unstyled" th:if="${backup.lastVersion} != null">
+                            <li th:text="${backup.lastVersion.id}"></li>
+                            <li th:text="${backup.lastVersion.createdDate} ? ${#dates.format(backup.lastVersion.createdDate, '__#{date.format}__')}"></li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-center" th:if="${#lists.isEmpty(backupList)}">
+                        No items
+                    </td>
+                </tr>
             </tbody>
         </table>
 

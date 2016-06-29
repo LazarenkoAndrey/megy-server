@@ -42,7 +42,7 @@ public class JpaConfig {
         Properties jpaProperties = new Properties();
         jpaProperties.put(Environment.DIALECT, dialect);
         jpaProperties.put(Environment.HBM2DDL_AUTO, false);
-        jpaProperties.put(Environment.SHOW_SQL, false);
+        jpaProperties.put(Environment.SHOW_SQL, true);
         jpaProperties.put(Environment.FORMAT_SQL, false);
         entityManagerFactoryBean.setJpaProperties(jpaProperties);
 

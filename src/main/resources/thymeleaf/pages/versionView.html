@@ -11,7 +11,7 @@
             <li class="list-group-item">
                 <h4 class="list-group-item-heading"><small>Repository item</small></h4>
                 <div class="list-group-item-text">
-                    <dl class="dl-horizontal">
+                    <dl class="dl-horizontal small">
                         <dt>ID</dt>
                         <dd>
                             <a th:href="@{'/pages/repoView/' + ${version.backup.repo.id}}" th:text="${version.backup.repo.id}"/>
@@ -24,7 +24,7 @@
             <li class="list-group-item">
                 <h4 class="list-group-item-heading"><small>Backup item</small></h4>
                 <div class="list-group-item-text">
-                    <dl class="dl-horizontal">
+                    <dl class="dl-horizontal small">
                         <dt>ID</dt>
                         <dd>
                             <a th:href="@{'/pages/backupView/' + ${version.backup.id}}" th:text="${version.backup.id}"/>
@@ -52,21 +52,25 @@
         <table class="table table-hover">
             <caption>Statistics</caption>
             <thead>
-            <tr>
-                <th class="col-md-4">Name</th>
-                <th class="col-md-8">Value</th>
-            </tr>
+                <tr>
+                    <th>Name</th>
+                    <th>Total</th>
+                    <th>Files</th>
+                    <th>Directories</th>
+                </tr>
             </thead>
             <tbody>
-            <tr th:each="statistic : ${statisticList}">
-                <td th:text="${statistic.name}"></td>
-                <td th:text="${#numbers.formatInteger(statistic.value, 1, 'WHITESPACE')}"></td>
-            </tr>
-            <tr>
-                <td colspan="2" class="text-center" th:if="${#lists.isEmpty(statisticList)}">
-                    No items
-                </td>
-            </tr>
+                <tr th:each="statistic : ${statisticList}">
+                    <td th:text="${statistic.name}"></td>
+                    <td th:text="${statistic.value != null} ? ${#numbers.formatInteger(statistic.value, 1, 'WHITESPACE')}"></td>
+                    <td th:text="${statistic.valueFile != null} ? ${#numbers.formatInteger(statistic.valueFile, 1, 'WHITESPACE')}"></td>
+                    <td th:text="${statistic.valueDir != null} ? ${#numbers.formatInteger(statistic.valueDir, 1, 'WHITESPACE')}"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-center" th:if="${#lists.isEmpty(statisticList)}">
+                        No items
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

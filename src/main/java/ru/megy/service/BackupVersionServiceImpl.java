@@ -13,8 +13,10 @@ import ru.megy.repository.BackupRepository;
 import ru.megy.repository.BackupVersionRepository;
 import ru.megy.repository.entity.Backup;
 import ru.megy.repository.entity.BackupVersion;
+import ru.megy.repository.type.ItemTypeEnum;
 import ru.megy.service.entity.BackupVersionStatistic;
 
+import javax.persistence.EnumType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,8 +69,36 @@ public class BackupVersionServiceImpl implements BackupVersionService {
         list.add(statistic);
 
         statistic = new BackupVersionStatistic();
-        statistic.setName("Total number of files");
-        statistic.setValue(backupVersionRepository.getTotalFiles(backupId, versionId));
+        statistic.setName("Total number of items");
+        statistic.setValueFile(backupVersionRepository.getTotalItems(ItemTypeEnum.FILE, backupId, versionId));
+        statistic.setValueDir(backupVersionRepository.getTotalItems(ItemTypeEnum.DIR, backupId, versionId));
+        statistic.setValue(statistic.getValueFile() + statistic.getValueDir());
+        list.add(statistic);
+
+        statistic = new BackupVersionStatistic();
+        statistic.setName("The number of added items");
+        statistic.setValueFile(backupVersionRepository.getNumberAddedItems(ItemTypeEnum.FILE, backupId, versionId));
+        statistic.setValueDir(backupVersionRepository.getNumberAddedItems(ItemTypeEnum.DIR, backupId, versionId));
+        statistic.setValue(statistic.getValueFile() + statistic.getValueDir());
+        list.add(statistic);
+
+        statistic = new BackupVersionStatistic();
+        statistic.setName("The number of updated items");
+        statistic.setValueFile(backupVersionRepository.getNumberUpdatedItems(ItemTypeEnum.FILE, backupId, versionId));
+        statistic.setValueDir(backupVersionRepository.getNumberUpdatedItems(ItemTypeEnum.DIR, backupId, versionId));
+        statistic.setValue(statistic.getValueFile() + statistic.getValueDir());
+        list.add(statistic);
+
+        statistic = new BackupVersionStatistic();
+        statistic.setName("The number of removed items");
+        statistic.setValueFile(backupVersionRepository.getNumberRemovedItems(ItemTypeEnum.FILE, backupId, versionId));
+        statistic.setValueDir(backupVersionRepository.getNumberRemovedItems(ItemTypeEnum.DIR, backupId, versionId));
+        statistic.setValue(statistic.getValueFile() + statistic.getValueDir());
+        list.add(statistic);
+
+        statistic = new BackupVersionStatistic();
+        statistic.setName("The number of new storages");
+        statistic.setValue(backupVersionRepository.getNumberNewStorages(backupId, versionId));
         list.add(statistic);
 
         return list;

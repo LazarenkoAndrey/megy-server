@@ -21,7 +21,7 @@ public class Backup {
     @NotNull
     private Repo repo;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "LAST_VERSION_ID")
     private BackupVersion lastVersion;
 
