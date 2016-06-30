@@ -1,5 +1,6 @@
 package ru.megy.service;
 
+import javafx.collections.transformation.SortedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import ru.megy.util.FileVisitorListener;
 import ru.megy.util.objects.Item;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -26,6 +26,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class BackupServiceImpl implements BackupService {
@@ -96,6 +97,93 @@ public class BackupServiceImpl implements BackupService {
         return backup.getId();
     }
 
+
+    @Transactional(rollbackFor = ServiceException.class)
+    @Override
+    public SortedMap<String, SortedSet<String>> check(Long backupId, TaskThread taskThread) throws ServiceException {
+        Backup backup = backupRepository.findOne(backupId);
+        if(backup==null) {
+            throw new ServiceException(String.format("Backup with id %d don't found", backupId));
+        }
+
+        if(!Paths.get(backup.getPath()).toFile().exists()) {
+            throw new ServiceException("Files directory not found. " + backup.getPath());
+        }
+
+        Repo repo = backup.getRepo();
+        if(!Paths.get(repo.getPath()).toFile().exists()) {
+            throw new ServiceException("Files directory not found. " + repo.getPath());
+        }
+
+        try(FileLock fileLock = lockBackup(backup)) {
+            SortedMap<String, SortedSet<String>> checkMessages = Collections.synchronizedSortedMap(new TreeMap<>());
+            Set<String> storePaths = new HashSet<>();
+            List<Store> storeList = storeRepository.findAllByBackup(backup.getId());
+            int storeListSize = storeList.size();
+            for(int i=0; i<storeListSize; i++) {
+                taskThread.setPercent(50.0f * i / storeListSize);
+                if(taskThread.isStopping()){
+                    throw new InterruptedException("It was interrupt from taskThread");
+                }
+
+                Store store = storeList.get(i);
+                storePaths.add(store.getPath());
+                Path storeRealPath = Paths.get(backup.getPath(), store.getPath());
+
+                if(!Files.exists(storeRealPath)) {
+                    addCheckMessage(checkMessages, store.getPath(), "File not found");
+                    continue;
+                }
+
+                Long sizeByte = FUtils.getSizeItems(storeRealPath);
+                if(!store.getSizeByte().equals(sizeByte)) {
+                    addCheckMessage(checkMessages, store.getPath(), "File size is not correct");
+                    continue;
+                }
+
+                String sha512 = FUtils.sha512(storeRealPath);
+                if(!store.getSha512().equals(sha512)) {
+                    addCheckMessage(checkMessages, store.getPath(), "Hash-sum is not correct");
+                    continue;
+                }
+            }
+
+            Path root = Paths.get(backup.getPath(), backup.getId().toString());
+            AtomicLong size = new AtomicLong(0);
+            Files.walk(root)
+                    .forEach(path -> size.addAndGet(1));
+
+            AtomicLong index = new AtomicLong(0);
+            Files.walk(root)
+                    .map(path -> {
+                        index.addAndGet(1);
+                        taskThread.setPercent(50.0f + 50.0f * index.get() / size.get());
+                        if(taskThread.isStopping()){
+                            throw new RuntimeException("It was interrupt from taskThread");
+                        }
+                        return path.toFile();
+                    })
+                    .filter(file -> file.isFile())
+                    .map(file -> Paths.get(file.getAbsolutePath()).relativize(root))
+                    .filter(path -> !storePaths.contains(path.toString()))
+                    .forEach(path -> addCheckMessage(checkMessages, path.toString(), "The file is not a storage and can be removed"));
+
+            taskThread.setPercent(100.0f);
+            unlockBackup(fileLock);
+            return checkMessages;
+        } catch (Exception e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    private void addCheckMessage(Map<String, SortedSet<String>> checkMessages, String value, String message) {
+        if(!checkMessages.containsKey(message)) {
+            checkMessages.put(message, Collections.synchronizedSortedSet(new TreeSet<>()));
+        }
+        SortedSet<String> set =  checkMessages.get(message);
+        set.add(value);
+    }
+
     @Transactional(rollbackFor = ServiceException.class)
     @Override
     public Long sync(Long backupId, TaskThread taskThread) throws ServiceException {
@@ -130,7 +218,7 @@ public class BackupServiceImpl implements BackupService {
             backup.setLastVersion(backupVersion);
             backup = backupRepository.save(backup);
 
-            List<Reserve> reserveList = reserveRepository.findAllByBackupAndVersion(backup, backup.getLastVersion()!=null ? backup.getLastVersion().getId() : null);
+            List<Reserve> reserveList = reserveRepository.findAllByBackupAndVersion(backup.getId(), backup.getLastVersion()!=null ? backup.getLastVersion().getId() : null);
 
             Map<String, Reserve> mapReserve = new HashMap<>();
             for(Reserve reserve : reserveList) {
@@ -162,7 +250,6 @@ public class BackupServiceImpl implements BackupService {
                 cntItem++;
                 taskThread.setPercent(20.0f + 50.0f * cntItem / totalItem);
                 if(taskThread.isStopping()){
-                    logger.error("It was interrupt from taskThread");
                     throw new InterruptedException("It was interrupt from taskThread");
                 }
             }
@@ -181,7 +268,6 @@ public class BackupServiceImpl implements BackupService {
                 cntItem++;
                 taskThread.setPercent(70.0f + 20.0f * cntItem / totalItem);
                 if(taskThread.isStopping()){
-                    logger.error("It was interrupt from taskThread");
                     throw new InterruptedException("It was interrupt from taskThread");
                 }
             }

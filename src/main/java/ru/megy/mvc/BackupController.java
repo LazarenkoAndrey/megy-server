@@ -84,8 +84,16 @@ public class BackupController {
 
     @Secured("ROLE_ADMIN")
     @RequestMapping("/action/backup/sync")
-    public String backupAction(@RequestParam("backupId") long backupId) throws ViewException {
+    public String backupSyncAction(@RequestParam("backupId") long backupId) throws ViewException {
         Long taskId = taskRunnerService.doBackupSync(backupId);
+
+        return "redirect:/pages/taskList?selected="+taskId;
+    }
+
+    @Secured("ROLE_ADMIN")
+    @RequestMapping("/action/backup/check")
+    public String backupCheckAction(@RequestParam("backupId") long backupId) throws ViewException {
+        Long taskId = taskRunnerService.doBackupCheck(backupId);
 
         return "redirect:/pages/taskList?selected="+taskId;
     }

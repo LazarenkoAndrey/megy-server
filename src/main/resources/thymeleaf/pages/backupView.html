@@ -37,6 +37,12 @@
                                 <input type="submit" value="Synchronize" class="btn btn-default disableButtonOnClick" />
                             </form>
                         </li>
+                        <li>
+                            <form th:action="@{/action/backup/check}" method="post">
+                                <input type="hidden" name="backupId" th:value="${backup.id}" />
+                                <input type="submit" value="Check" class="btn btn-default disableButtonOnClick" />
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </li>

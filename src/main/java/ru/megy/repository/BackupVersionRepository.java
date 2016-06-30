@@ -14,6 +14,7 @@ import javax.persistence.EnumType;
 public interface BackupVersionRepository extends CrudRepository<BackupVersion, Long> {
     Page<BackupVersion> findAll(Pageable pageable);
     Page<BackupVersion> findAllByBackup(Backup backup, Pageable pageable);
+    Iterable<BackupVersion> findAllByBackup(Backup backup);
 
     @Query("select sum(r.sizeByte) from Reserve r where r.backup.id = :backupId and :versionId between r.versionId and r.lastVersionId and r.type = 'FILE'")
     Long getTotalSize(@Param("backupId") Long backupId, @Param("versionId") Long versionId);
