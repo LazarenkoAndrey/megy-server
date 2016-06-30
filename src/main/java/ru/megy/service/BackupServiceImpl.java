@@ -307,9 +307,9 @@ public class BackupServiceImpl implements BackupService {
     private Store createStore(Reserve newReserve) throws IOException {
         String repoPath = newReserve.getBackup().getRepo().getPath();
         String itemPath = newReserve.getPath();
-        Path pathFile = Paths.get(repoPath, itemPath);
-        String sha512 = FUtils.sha512(pathFile);
-        Long size = FUtils.getSizeItems(pathFile);
+        Path realFilePath = Paths.get(repoPath, itemPath);
+        String sha512 = FUtils.sha512(realFilePath);
+        Long size = FUtils.getSizeItems(realFilePath);
 
         Store store = null;
         List<Store> listStore = storeRepository.findAllByBackupAndSha512(newReserve.getBackup(), sha512);
@@ -317,21 +317,22 @@ public class BackupServiceImpl implements BackupService {
             if(!itemStore.getSizeByte().equals(size)) {
                 continue;
             }
-            Path compPath = Paths.get(itemStore.getBackup().getPath(), itemStore.getPath());
-            if(FUtils.fileComparison(pathFile, compPath)) {
+            Path storeFilePath = Paths.get(itemStore.getBackup().getPath(), itemStore.getPath());
+            if(FUtils.fileComparison(realFilePath, storeFilePath)) {
                 store = itemStore;
             }
         }
 
         if(store == null) {
-            String newPathString = pathForStore(sha512, newReserve.getBackup());
-            Path newFullPath = Paths.get(newReserve.getBackup().getPath(), newPathString);
-            Files.createDirectories(newFullPath.getParent());
-            Files.copy(pathFile, newFullPath);
+            Path newStorePath = pathForStore(sha512, newReserve.getBackup());
+            Path backupPath = Paths.get(newReserve.getBackup().getPath());
+            Path fullPath = newStorePath.resolve(backupPath);
+            Files.createDirectories(fullPath.getParent());
+            Files.copy(realFilePath, fullPath);
 
             store = new Store();
             store.setBackup(newReserve.getBackup());
-            store.setPath(newPathString);
+            store.setPath(newStorePath.toString());
             store.setSha512(sha512);
             store.setSizeByte(size);
         }
@@ -339,30 +340,26 @@ public class BackupServiceImpl implements BackupService {
         return store;
     }
 
-    private String pathForStore(String sha512, Backup backup) {
-        String backupPath = backup.getPath();
+    private Path pathForStore(String sha512, Backup backup) {
+        Path backupPath = Paths.get(backup.getPath());
 
         Long backupId = backup.getId();
         SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy");
         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyyMMdd");
         Date date = new Date();
 
-        String sub1 = sha512.substring(0,2);
-        String sub2 = sha512.substring(2,10);
-        String pathDir = backupId.toString() + File.separatorChar +
-                sdfYear.format(date) + File.separatorChar +
-                sdfDate.format(date) + File.separatorChar +
-                sub1;
+        String subDir = sha512.substring(0,2);
+        String fileName = sha512.substring(2, 10);
+        Path subPath = Paths.get(backupId.toString(), sdfYear.format(date), sdfDate.format(date), subDir);
 
-        Path dir = Paths.get(backupPath);
-        Path pathFile = Paths.get(pathDir, sub2);
+        Path subFilePath = subPath.resolve(Paths.get(fileName));
         long num = 0;
-        while(Files.exists(dir.resolve(pathFile))) {
-            pathFile = Paths.get(pathDir, sub2+ num);
+        while(Files.exists(backupPath.resolve(subFilePath))) {
+            subFilePath = subPath.resolve(Paths.get(fileName, Long.toString(num)));
             num++;
         }
 
-        return pathFile.toString();
+        return subFilePath;
     }
 
     private FileLock lockBackup(Backup backup) throws IOException {
