@@ -55,8 +55,13 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskThread findActiveTask(Long taskId) {
+    public TaskThread findTask(Long taskId) {
         for(TaskThread taskThread : activeTaskList) {
+            if(taskThread.getId()==taskId.longValue()) {
+                return taskThread;
+            }
+        }
+        for(TaskThread taskThread : completedTaskList) {
             if(taskThread.getId()==taskId.longValue()) {
                 return taskThread;
             }

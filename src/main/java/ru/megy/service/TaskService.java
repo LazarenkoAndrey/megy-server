@@ -10,6 +10,5 @@ public interface TaskService {
     long nextTaskId();
     void addActiveTask(TaskThread taskThread);
     void completedTask(TaskThread taskThread);
-
-    TaskThread findActiveTask(Long taskId);
+    TaskThread findTask(Long taskId);
 }

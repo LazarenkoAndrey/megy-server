@@ -155,16 +155,15 @@ public class BackupServiceImpl implements BackupService {
 
             AtomicLong index = new AtomicLong(0);
             Files.walk(root)
-                    .map(path -> {
+                    .filter(path -> {
                         index.addAndGet(1);
                         taskThread.setPercent(50.0f + 50.0f * index.get() / size.get());
                         if(taskThread.isStopping()){
                             throw new RuntimeException("It was interrupt from taskThread");
                         }
-                        return path.toFile();
+                        return Files.isRegularFile(path);
                     })
-                    .filter(file -> file.isFile())
-                    .map(file -> Paths.get(file.getAbsolutePath()).relativize(root))
+                    .map(path -> root.relativize(path))
                     .filter(path -> !storePaths.contains(path.toString()))
                     .forEach(path -> addCheckMessage(checkMessages, path.toString(), "The file is not a storage and can be removed"));
 
@@ -326,7 +325,7 @@ public class BackupServiceImpl implements BackupService {
         if(store == null) {
             Path newStorePath = pathForStore(sha512, newReserve.getBackup());
             Path backupPath = Paths.get(newReserve.getBackup().getPath());
-            Path fullPath = newStorePath.resolve(backupPath);
+            Path fullPath = backupPath.resolve(newStorePath);
             Files.createDirectories(fullPath.getParent());
             Files.copy(realFilePath, fullPath);
 

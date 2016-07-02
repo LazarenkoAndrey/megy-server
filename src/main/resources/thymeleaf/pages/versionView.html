@@ -55,16 +55,12 @@
                 <tr>
                     <th>Name</th>
                     <th>Total</th>
-                    <th>Files</th>
-                    <th>Directories</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="statistic : ${statisticList}">
                     <td th:text="${statistic.name}"></td>
                     <td th:text="${statistic.value != null} ? ${#numbers.formatInteger(statistic.value, 1, 'WHITESPACE')}"></td>
-                    <td th:text="${statistic.valueFile != null} ? ${#numbers.formatInteger(statistic.valueFile, 1, 'WHITESPACE')}"></td>
-                    <td th:text="${statistic.valueDir != null} ? ${#numbers.formatInteger(statistic.valueDir, 1, 'WHITESPACE')}"></td>
                 </tr>
                 <tr>
                     <td colspan="2" class="text-center" th:if="${#lists.isEmpty(statisticList)}">

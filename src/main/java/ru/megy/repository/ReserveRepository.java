@@ -12,8 +12,8 @@ public interface ReserveRepository extends CrudRepository<Reserve, Long> {
     List<Reserve> findAllByBackup(Backup backup);
 
     @Query( "select r from Reserve r where r.backup.id = :backupId and :versionId between r.versionId and r.lastVersionId")
-    List<Reserve> findAllByBackupAndVersion(@Param("backup") Long backupId, @Param("versionId") Long versionId);
+    List<Reserve> findAllByBackupAndVersion(@Param("backupId") Long backupId, @Param("versionId") Long versionId);
 
     @Query( "select r from Reserve r where r.backup.id = :backupId")
-    List<Reserve> findAllByBackup(@Param("backup") Long backupId);
+    List<Reserve> findAllByBackup(@Param("backupId") Long backupId);
 }

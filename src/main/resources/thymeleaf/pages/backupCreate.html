@@ -7,39 +7,42 @@
     <nav th:replace="fragments/global :: navbar ('repoList')"/>
 
     <div class="container">
-        <div class="panel panel-default">
-            <div class="panel-heading">Create backup</div>
-            <div class="panel-body">
-                <ul class="list-inline">
-                    <li>
-                        <dl class="dl-horizontal">
-                            <dt>Repository ID</dt>
-                            <dd th:text="${repo.id}" />
-                            <dt>Repository path</dt>
-                            <dd th:text="${repo.path}" />
-                        </dl>
-                    </li>
-                </ul>
-                <!--/*@thymesVar id="backupVO" type="ru.megy.mvc.objects.BackupVO"*/-->
-                <form th:action="@{/action/backup/add}" method="post"
-                      th:object="${backupVO}">
-                    <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
-                        <ul class="list-unstyled">
-                            <li th:each="err : ${#fields.errors('*')}"
-                                th:text="${err}"/>
-                        </ul>
-                    </div>
-
-                    <div th:class="'form-group' + (${#fields.hasErrors('path')} ? ' has-error' : '')">
-                        <label for="inputPath" class="control-label">Path</label>
-                        <input id="inputPath" type="text" class="form-control" placeholder="Path" th:field="*{path}"/>
-                    </div>
-
-                    <input type="hidden" th:field="*{repoId}"/>
-                    <input type="submit" value="Create" class="btn btn-primary disableButtonOnClick" />
-                </form>
-            </div>
-        </div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading"><small>Repository item</small></h4>
+                <div class="list-group-item-text">
+                    <dl class="dl-horizontal small">
+                        <dt>ID</dt>
+                        <dd>
+                            <a th:href="@{'/pages/repoView/' + ${repo.id}}" th:text="${repo.id}"/>
+                        </dd>
+                        <dt>Path</dt>
+                        <dd th:text="${repo.path}" />
+                    </dl>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading">Create backup</h4>
+                <div class="list-group-item-text">
+                    <!--/*@thymesVar id="backupVO" type="ru.megy.mvc.objects.BackupVO"*/-->
+                    <form th:action="@{/action/backup/add}" method="post"
+                          th:object="${backupVO}">
+                        <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+                            <ul class="list-unstyled">
+                                <li th:each="err : ${#fields.errors('*')}"
+                                    th:text="${err}"/>
+                            </ul>
+                        </div>
+                        <div th:class="'form-group' + (${#fields.hasErrors('path')} ? ' has-error' : '')">
+                            <label for="inputPath" class="control-label">Path</label>
+                            <input id="inputPath" type="text" class="form-control" placeholder="Path" th:field="*{path}"/>
+                        </div>
+                        <input type="hidden" th:field="*{repoId}"/>
+                        <input type="submit" value="Create" class="btn btn-primary disableButtonOnClick" />
+                    </form>
+                </div>
+            </li>
+        </ul>
     </div>
 
     <div th:replace="fragments/global :: script"/>

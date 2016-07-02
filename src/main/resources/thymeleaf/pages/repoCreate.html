@@ -7,25 +7,27 @@
     <nav th:replace="fragments/global :: navbar ('repoList')"/>
 
     <div class="container">
-        <div class="panel panel-default">
-            <div class="panel-heading">Create repository</div>
-            <div class="panel-body">
-                <!--/*@thymesVar id="repoVO" type="ru.megy.mvc.objects.RepoVO"*/-->
-                <form th:action="@{/action/repo/add}" method="post" th:object="${repoVO}">
-                    <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
-                        <ul class="list-unstyled">
-                            <li th:each="err : ${#fields.errors('*')}" th:text="${err}"/>
-                        </ul>
-                    </div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <h4 class="list-group-item-heading">Create repository</h4>
+                <div class="list-group-item-text">
+                    <!--/*@thymesVar id="repoVO" type="ru.megy.mvc.objects.RepoVO"*/-->
+                    <form th:action="@{/action/repo/add}" method="post" th:object="${repoVO}">
+                        <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+                            <ul class="list-unstyled">
+                                <li th:each="err : ${#fields.errors('*')}" th:text="${err}"/>
+                            </ul>
+                        </div>
 
-                    <div th:class="'form-group' + (${#fields.hasErrors('path')} ? ' has-error' : '')">
-                        <label for="inputPath" class="control-label">Path</label>
-                        <input id="inputPath" type="text" class="form-control" placeholder="Path" th:field="*{path}"/>
-                    </div>
-                    <input type="submit" value="Create" class="btn btn-primary disableButtonOnClick" />
-                </form>
-            </div>
-        </div>
+                        <div th:class="'form-group' + (${#fields.hasErrors('path')} ? ' has-error' : '')">
+                            <label for="inputPath" class="control-label">Path</label>
+                            <input id="inputPath" type="text" class="form-control" placeholder="Path" th:field="*{path}"/>
+                        </div>
+                        <input type="submit" value="Create" class="btn btn-primary disableButtonOnClick" />
+                    </form>
+                </div>
+            </li>
+        </ul>
     </div>
 
     <div th:replace="fragments/global :: script"/>

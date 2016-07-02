@@ -27,7 +27,7 @@ public class TaskRunnerServiceImpl implements TaskRunnerService {
 
     @Override
     public Long doBackupCheck(long backupId) {
-        TaskThread taskThread = new TaskThreadWithResult("Check of backup (backupId" + backupId + ")", taskService) {
+        TaskThread taskThread = new TaskThreadWithResult("Check of backup (backupId: " + backupId + ")", taskService) {
             @Override
             public void process() throws ServiceException {
                 logger.info("Check of backup (backupId: {})", backupId);
