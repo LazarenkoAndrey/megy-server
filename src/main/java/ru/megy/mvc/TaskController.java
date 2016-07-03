@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.megy.exception.ViewException;
@@ -45,12 +46,11 @@ public class TaskController {
         return "redirect:/pages/taskList?selected="+taskId;
     }
 
-    @RequestMapping("/action/task/result")
-    public String taskResult(@RequestParam("taskId") long taskId, Model model) throws ViewException {
+    @RequestMapping("/pages/taskResult/{taskId}")
+    public String taskResult(@PathVariable("taskId") long taskId, Model model) throws ViewException {
         TaskThreadWithResult taskThread = (TaskThreadWithResult)taskService.findTask(taskId);
         model.addAttribute("result", taskThread.getResult());
-
-        return "redirect:/pages/taskResult";
+        return "/pages/taskResult";
     }
 
 }

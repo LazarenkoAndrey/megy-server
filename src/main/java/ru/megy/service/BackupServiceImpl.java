@@ -273,9 +273,8 @@ public class BackupServiceImpl implements BackupService {
 
             reserveRepository.save(forSave);
             taskThread.setPercent(100.0f);
-            taskThread.setResultUrl("/pages/versionView/"+backupVersion.getId());
-            unlockBackup(fileLock);
 
+            unlockBackup(fileLock);
             return backupVersion.getId();
         } catch (Exception e) {
             throw new ServiceException(e);

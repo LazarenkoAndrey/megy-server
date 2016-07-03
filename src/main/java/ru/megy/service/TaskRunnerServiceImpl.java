@@ -33,6 +33,7 @@ public class TaskRunnerServiceImpl implements TaskRunnerService {
                 logger.info("Check of backup (backupId: {})", backupId);
                 SortedMap<String, SortedSet<String>> result = backupService.check(Long.valueOf(backupId), this);
                 this.setResult(result);
+                this.setResultUrl("/pages/taskResult/"+getId());
                 logger.info("Check of backup was completed successfully");
             }
         };
@@ -50,6 +51,7 @@ public class TaskRunnerServiceImpl implements TaskRunnerService {
             public void process() throws ServiceException {
                 logger.info("Synchronization of repository (backupId: {})", backupId);
                 Long versionId = backupService.sync(Long.valueOf(backupId), this);
+                this.setResultUrl("/pages/versionView/" + versionId);
                 logger.info("Sync of backup was completed successfully. BackupId: {}, versionId: {}", backupId, versionId);
             }
         };
