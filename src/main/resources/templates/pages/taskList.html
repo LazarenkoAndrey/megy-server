@@ -6,7 +6,7 @@
 <body>
     <nav th:replace="fragments/global :: navbar ('taskList')"/>
 
-    <div class="container">
+    <div class="container" id="taskListContainer" th:fragment="taskListFragment">
         <table class="table table-hover">
             <caption>Active tasks</caption>
             <thead>
@@ -45,9 +45,7 @@
                 </tr>
             </tbody>
         </table>
-    </div>
 
-    <div class="container">
         <table class="table table-hover">
             <caption>Completed tasks</caption>
             <thead>
@@ -81,5 +79,19 @@
     </div>
 
     <div th:replace="fragments/global :: script"/>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        function updateTaskList() {
+            var link = /*[[@{/pages/taskList(fragment=true,selected=${selectedTaskId})}]]*/ '';
+            $.get(link, function(data) {
+                $("#taskListContainer").replaceWith(data);
+            });
+        }
+        $(document).ready(function() {
+            setInterval(updateTaskList, 3000);
+        });
+        /*]]>*/
+    </script>
 </body>
 </html>

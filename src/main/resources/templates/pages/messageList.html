@@ -8,16 +8,34 @@
 
     <div class="container">
         <table class="table table-hover">
-            <caption>Message list</caption>
+            <caption>
+                <div class="row">
+                    <div class="col-md-9">
+                        Message list
+                    </div>
+                    <div class="col-md-3 text-right">
+                        <div class="btn-group">
+                            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a th:href="@{/action/message/sendTest}" role="button">Create test message</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </caption>
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Status</th>
                     <th>Subject</th>
                     <th>Text</th>
-                    <th>Created date</th>
-                    <th>Sent date</th>
-                    <th>Attempts</th>
+                    <th class="col-md-1">Created date</th>
+                    <th class="col-md-1">Sent date</th>
+                    <th class="col-md-1">Attempts</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,12 +55,6 @@
                 </tr>
             </tbody>
         </table>
-
-        <ul class="list-inline">
-            <li>
-                <a th:href="@{/action/message/sendTest}" class="btn btn-default disableButtonOnClick" role="button">Create test message</a>
-            </li>
-        </ul>
     </div>
 
     <div th:replace="fragments/global :: script"/>

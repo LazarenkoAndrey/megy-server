@@ -33,7 +33,7 @@ public class TaskRunnerServiceImpl implements TaskRunnerService {
                 logger.info("Check of backup (backupId: {})", backupId);
                 SortedMap<String, SortedSet<String>> result = backupService.check(Long.valueOf(backupId), this);
                 this.setResult(result);
-                this.setResultUrl("/pages/taskResult/"+getId());
+                this.setResultUrl("/pages/taskResultView/"+getId());
                 logger.info("Check of backup was completed successfully");
             }
         };

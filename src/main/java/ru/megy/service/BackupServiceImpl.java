@@ -148,6 +148,7 @@ public class BackupServiceImpl implements BackupService {
                 }
             }
 
+            Path backupPath = Paths.get(backup.getPath());
             Path root = Paths.get(backup.getPath(), backup.getId().toString());
             AtomicLong size = new AtomicLong(0);
             Files.walk(root)
@@ -163,7 +164,7 @@ public class BackupServiceImpl implements BackupService {
                         }
                         return Files.isRegularFile(path);
                     })
-                    .map(path -> root.relativize(path))
+                    .map(path -> backupPath.relativize(path))
                     .filter(path -> !storePaths.contains(path.toString()))
                     .forEach(path -> addCheckMessage(checkMessages, path.toString(), "The file is not a storage and can be removed"));
 
@@ -177,7 +178,7 @@ public class BackupServiceImpl implements BackupService {
 
     private void addCheckMessage(Map<String, SortedSet<String>> checkMessages, String value, String message) {
         if(!checkMessages.containsKey(message)) {
-            checkMessages.put(message, Collections.synchronizedSortedSet(new TreeSet<>()));
+            checkMessages.putIfAbsent(message, Collections.synchronizedSortedSet(new TreeSet<>()));
         }
         SortedSet<String> set =  checkMessages.get(message);
         set.add(value);

@@ -91,8 +91,11 @@ public abstract class TaskThread {
     }
 
     public long getSpentTime() {
-        long currentTime = System.currentTimeMillis();
-        return (currentTime-startTime);
+        if(status.equals(TaskStatusEnum.COMPLETE) || status.equals(TaskStatusEnum.FAILED)) {
+            return finishTime-startTime;
+        } else {
+            return System.currentTimeMillis() - startTime;
+        }
     }
 
     public long getLeftTime() {

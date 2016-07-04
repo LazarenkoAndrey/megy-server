@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head th:replace="fragments/global :: head" />
+<body>
+    <nav th:replace="fragments/global :: navbar ('repoList')"/>
+
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Result of task
+                <a th:text="'#' + ${taskId}" th:href="@{/pages/taskList(selected=${taskId})}"></a>
+            </div>
+            <ul id="resultList" class="list-group">
+                <li class="list-group-item" th:each="group,status : ${result}">
+                    <h4 class="list-group-item-heading">
+                        <a role="button" data-toggle="collapse" th:href="'#group' + ${status.index}" aria-expanded="false" th:attr="aria-controls='group__${status.index}__'"
+                           th:text="${group.key}">
+                        </a>
+                        <span class="badge" th:text="${#sets.size(group.value)}" />
+                    </h4>
+                    <div th:id="'group' + ${status.index}" class="list-group-item-text collapse">
+                        <ol>
+                            <li th:each="path : ${group.value}" th:text="${path}"/>
+                        </ol>
+                    </div>
+                </li>
+                <li class="list-group-item" th:if="${#maps.isEmpty(result)}">
+                    <h4 class="list-group-item-heading">
+                        No items
+                    </h4>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div th:replace="fragments/global :: script"/>
+</body>
+</html>

@@ -1,5 +1,6 @@
 package ru.megy.mvc;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +26,20 @@ public class TaskController {
     private TaskService taskService;
 
     @RequestMapping("/pages/taskList")
-    public String taskList(@RequestParam(value = "selected", required=false) Long selectedTaskId, Model model) {
+    public String taskList(@RequestParam(value = "selected", required=false) Long selectedTaskId,
+                           @RequestParam(value = "fragment", required=false) Boolean isFragment,
+                           Model model) {
         List<TaskThread> activeTaskList = taskService.getActiveTaskList();
         List<TaskThread> completedTaskList = taskService.getCompletedTaskList();
         model.addAttribute("activeTaskList", activeTaskList);
         model.addAttribute("completedTaskList", completedTaskList);
         model.addAttribute("selectedTaskId", selectedTaskId);
 
-        return "/pages/taskList";
+        if(Boolean.TRUE.equals(isFragment)) {
+            return "/pages/taskList :: taskListFragment";
+        } else {
+            return "/pages/taskList";
+        }
     }
 
     @Secured("ROLE_ADMIN")
@@ -46,11 +53,12 @@ public class TaskController {
         return "redirect:/pages/taskList?selected="+taskId;
     }
 
-    @RequestMapping("/pages/taskResult/{taskId}")
-    public String taskResult(@PathVariable("taskId") long taskId, Model model) throws ViewException {
+    @RequestMapping("/pages/taskResultView/{taskId}")
+    public String taskResultView(@PathVariable("taskId") long taskId, Model model) throws ViewException {
         TaskThreadWithResult taskThread = (TaskThreadWithResult)taskService.findTask(taskId);
         model.addAttribute("result", taskThread.getResult());
-        return "/pages/taskResult";
+        model.addAttribute("taskId", taskId);
+        return "/pages/taskResultView";
     }
 
 }
