@@ -131,19 +131,19 @@ public class BackupServiceImpl implements BackupService {
                 Path storeRealPath = Paths.get(backup.getPath(), store.getPath());
 
                 if(!Files.exists(storeRealPath)) {
-                    addCheckMessage(checkMessages,"[path of backup] " + store.getPath(), "File not found");
+                    addCheckMessage(checkMessages, store.getPath(), "File not found");
                     continue;
                 }
 
                 Long sizeByte = FUtils.getSizeItems(storeRealPath);
                 if(!store.getSizeByte().equals(sizeByte)) {
-                    addCheckMessage(checkMessages, "[path of backup] " + store.getPath(), "File size is not correct");
+                    addCheckMessage(checkMessages, store.getPath(), "File size is not correct");
                     continue;
                 }
 
                 String sha512 = FUtils.sha512(storeRealPath);
                 if(!store.getSha512().equals(sha512)) {
-                    addCheckMessage(checkMessages, "[path of backup] " + store.getPath(), "Hash-sum is not correct");
+                    addCheckMessage(checkMessages, store.getPath(), "Hash-sum is not correct");
                     continue;
                 }
             }
@@ -166,7 +166,7 @@ public class BackupServiceImpl implements BackupService {
                     })
                     .map(path -> backupPath.relativize(path))
                     .filter(path -> !storePaths.contains(path.toString()))
-                    .forEach(path -> addCheckMessage(checkMessages, "[path of backup] " + path.toString(), "The file is not a storage and can be removed"));
+                    .forEach(path -> addCheckMessage(checkMessages, path.toString(), "The file is not a storage and can be removed"));
 
             taskThread.setPercent(100.0f);
             unlockBackup(fileLock);

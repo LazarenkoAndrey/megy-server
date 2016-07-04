@@ -8,7 +8,25 @@
 
     <div class="container">
         <table class="table table-hover">
-            <caption>Repository list</caption>
+            <caption>
+                <div class="row">
+                    <div class="col-md-9">
+                        Repository list
+                    </div>
+                    <div class="col-md-3 text-right">
+                        <div class="btn-group">
+                            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a th:href="@{/pages/repoCreate}" role="button">Add</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </caption>
             <thead>
                 <tr>
                     <th>ID</th>
@@ -29,12 +47,6 @@
                 </tr>
             </tbody>
         </table>
-
-        <ul class="list-inline">
-            <li>
-                <a th:href="@{/pages/repoCreate}" class="btn btn-default disableButtonOnClick" role="button">Add</a>
-            </li>
-        </ul>
     </div>
 
     <div th:replace="fragments/global :: script"/>
