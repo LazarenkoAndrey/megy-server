@@ -46,11 +46,11 @@ public class TaskController {
         return "redirect:/pages/taskList?selected="+taskId;
     }
 
-    @RequestMapping("/pages/taskResult/{taskId}")
-    public String taskResult(@PathVariable("taskId") long taskId, Model model) throws ViewException {
+    @RequestMapping("/pages/taskResultView/{taskId}")
+    public String taskResultView(@PathVariable("taskId") long taskId, Model model) throws ViewException {
         TaskThreadWithResult taskThread = (TaskThreadWithResult)taskService.findTask(taskId);
         model.addAttribute("result", taskThread.getResult());
-        return "/pages/taskResult";
+        return "/pages/taskResultView";
     }
 
 }
