@@ -7,7 +7,8 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import ru.megy.config.*;
 
-@SpringBootApplication(scanBasePackages = "ru.megy.service")
+@SpringBootApplication(scanBasePackages = "ru.megy.service",
+                       exclude={org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration.class})
 public class Application {
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
