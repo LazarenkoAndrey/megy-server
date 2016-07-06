@@ -27,7 +27,7 @@ public class MessageController {
         model.addAttribute("messageList", messageList);
         model.addAttribute("selectedMessageId", selected);
 
-        return "/pages/messageList";
+        return "pages/messageList";
     }
 
     @Secured("ROLE_ADMIN")

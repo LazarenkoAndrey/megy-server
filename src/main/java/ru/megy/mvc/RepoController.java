@@ -37,7 +37,7 @@ public class RepoController {
         model.addAttribute("repoList", repoList);
         model.addAttribute("selectedRepoId", selected);
 
-        return "/pages/repoList";
+        return "pages/repoList";
     }
 
     @RequestMapping("/pages/repoCreate")
@@ -46,7 +46,7 @@ public class RepoController {
             model.addAttribute("repoVO", new RepoVO());
         }
 
-        return "/pages/repoCreate";
+        return "pages/repoCreate";
     }
 
     @Secured("ROLE_ADMIN")
@@ -78,7 +78,7 @@ public class RepoController {
         model.addAttribute("backupList", backupList);
         model.addAttribute("selectedBackupId", selected);
 
-        return "/pages/repoView";
+        return "pages/repoView";
     }
 
 

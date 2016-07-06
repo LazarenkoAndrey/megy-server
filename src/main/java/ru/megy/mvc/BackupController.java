@@ -46,7 +46,7 @@ public class BackupController {
         List<BackupVersion> backupVersionList = backupVersionService.getVersionList(backupId, 100);
         model.addAttribute("backupVersionList", backupVersionList);
 
-        return "/pages/backupView";
+        return "pages/backupView";
     }
 
     @RequestMapping("/pages/backupCreate")
@@ -59,7 +59,7 @@ public class BackupController {
         Repo repo = repoService.getRepo(repoId);
         model.addAttribute("repo", repo);
 
-        return "/pages/backupCreate";
+        return "pages/backupCreate";
     }
 
     @Secured("ROLE_ADMIN")

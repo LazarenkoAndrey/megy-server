@@ -20,16 +20,4 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
     }
 
-    /*
-    @Bean
-    public LocaleResolver localeResolver() {
-        //CookieLocaleResolver localeResolver = new CookieLocaleResolver();
-        //localeResolver.setDefaultLocale(new Locale("ru","RU"));
-        //localeResolver.setDefaultLocale(new Locale("en", "RU"));
-        SessionLocaleResolver localeResolver = new SessionLocaleResolver();
-        localeResolver.setDefaultLocale(new Locale("en", "EN"));
-
-        return localeResolver;
-    }
-    */
 }

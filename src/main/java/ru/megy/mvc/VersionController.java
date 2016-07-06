@@ -28,6 +28,6 @@ public class VersionController {
         model.addAttribute("version", backupVersion);
         model.addAttribute("statisticList", statisticList);
 
-        return "/pages/versionView";
+        return "pages/versionView";
     }
 }

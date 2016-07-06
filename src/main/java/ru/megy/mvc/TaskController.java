@@ -36,9 +36,9 @@ public class TaskController {
         model.addAttribute("selectedTaskId", selectedTaskId);
 
         if(Boolean.TRUE.equals(isFragment)) {
-            return "/pages/taskList :: taskListFragment";
+            return "pages/taskList :: taskListFragment";
         } else {
-            return "/pages/taskList";
+            return "pages/taskList";
         }
     }
 
@@ -58,7 +58,7 @@ public class TaskController {
         TaskThreadWithResult taskThread = (TaskThreadWithResult)taskService.findTask(taskId);
         model.addAttribute("result", taskThread.getResult());
         model.addAttribute("taskId", taskId);
-        return "/pages/taskResultView";
+        return "pages/taskResultView";
     }
 
 }
